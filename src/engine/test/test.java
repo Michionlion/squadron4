@@ -5,6 +5,7 @@ import engine.render.Loader;
 import engine.render.RawModel;
 import engine.render.Renderer;
 import org.lwjgl.opengl.Display;
+import shaders.StaticShader;
 
 public class test {
     
@@ -14,16 +15,17 @@ public class test {
         DisplayManager.createDisplay();
         Loader loader= new Loader();
         Renderer renderer = new Renderer();
+        StaticShader s = new StaticShader();
         
         float[] verts = {
-            -0.5f, 0.5f, 0,
+            -0.8f, 0.8f, 0,
             -0.5f, -0.5f, 0,
-            0.5f, -0.5f, 0,
-            0.5f,0.5f,0
+            0.1f, -0.1f, 0,
+            0.5f,1f,0
         };
         
         int[] indices = {
-            0,1,3,
+            0,1,2,
             3,1,2
         };
         
@@ -31,10 +33,13 @@ public class test {
         
         while(!Display.isCloseRequested()) {
             renderer.prepare();
-            
+            s.start();
             renderer.render(m);
             DisplayManager.updateDisplay();
+            s.stop();
         }
+        
+        s.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
     }
