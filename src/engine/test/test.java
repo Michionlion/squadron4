@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package engine.test;
 
 import engine.render.DisplayManager;
@@ -12,10 +6,6 @@ import engine.render.RawModel;
 import engine.render.Renderer;
 import org.lwjgl.opengl.Display;
 
-/**
- *
- * @author Saejin
- */
 public class test {
     
     
