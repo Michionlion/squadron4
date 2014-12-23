@@ -1,4 +1,4 @@
-package shaders;
+package assets.shaders;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

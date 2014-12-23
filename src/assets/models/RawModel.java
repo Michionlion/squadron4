@@ -1,4 +1,4 @@
-package engine.render;
+package assets.models;
 
 public class RawModel {
     

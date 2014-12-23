@@ -1,5 +1,6 @@
 package engine.render;
 
+import assets.models.RawModel;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;

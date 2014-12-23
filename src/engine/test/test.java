@@ -2,10 +2,10 @@ package engine.test;
 
 import engine.render.DisplayManager;
 import engine.render.Loader;
-import engine.render.RawModel;
+import assets.models.RawModel;
 import engine.render.Renderer;
 import org.lwjgl.opengl.Display;
-import shaders.StaticShader;
+import assets.shaders.StaticShader;
 
 public class test {
     
