@@ -11,6 +11,39 @@ public abstract class ShaderProgram {
     private int programID;
     private int vertexShaderID;
     private int fragmentShaderID;
+    
+    public ShaderProgram(String vertexFile, String fragmentFile) {
+        vertexShaderID = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
+        fragmentShaderID = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
+        programID = GL20.glCreateProgram();
+        GL20.glAttachShader(programID, vertexShaderID);
+        GL20.glAttachShader(programID, fragmentShaderID);
+        GL20.glLinkProgram(programID);
+        GL20.glValidateProgram(programID);
+    }
+    
+    public void start() {
+        GL20.glUseProgram(programID);
+    }
+    
+    public void stop() {
+        GL20.glUseProgram(0);
+    }
+    
+    public void cleanUp() {
+        stop();
+        GL20.glDetachShader(programID, vertexShaderID);
+        GL20.glDetachShader(programID, fragmentShaderID);
+        GL20.glDeleteShader(vertexShaderID);
+        GL20.glDeleteShader(fragmentShaderID);
+        GL20.glDeleteProgram(programID);
+    }
+    
+    protected abstract void bindAttributes();
+    
+    protected void bindAttribute(int attr, String varName) {
+        GL20.glBindAttribLocation(programID, attr, varName);
+    }
 
     private static int loadShader(String file, int type) {
         StringBuilder shaderSource = new StringBuilder();
