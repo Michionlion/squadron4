@@ -20,14 +20,14 @@ public class test {
         StaticShader s = new StaticShader();
         
         float[] verts = {
-            -0.8f, 0.8f, 0,
+            -0.5f, 0.5f, 0,
             -0.5f, -0.5f, 0,
-            0.1f, -0.1f, 0,
-            0.5f,1f,0
+            0.5f, -0.5f, 0,
+            0.5f,0.5f,0
         };
         
         int[] indices = {
-            0,1,2,
+            0,1,3,
             3,1,2
         };
         
