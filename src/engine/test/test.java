@@ -8,6 +8,8 @@ import engine.render.Renderer;
 import org.lwjgl.opengl.Display;
 import assets.shaders.StaticShader;
 import assets.textures.ModelTexture;
+import entities.Entity;
+import org.lwjgl.util.vector.Vector3f;
 
 public class test {
     
@@ -16,9 +18,8 @@ public class test {
         
         DisplayManager.createDisplay();
         Loader loader= new Loader();
-        Renderer renderer = new Renderer();
         StaticShader s = new StaticShader();
-        
+        Renderer renderer = new Renderer(s);
         float[] verts = {
             -0.5f, 0.5f, 0,
             -0.5f, -0.5f, 0,
@@ -38,14 +39,16 @@ public class test {
             1,0
             
         };
+        TexturedModel model = new TexturedModel(loader.loadToVAO(verts, texCoords, indices), new ModelTexture(loader.loadTexture("image")));
         
-        RawModel m = loader.loadToVAO(verts, texCoords, indices);
-        ModelTexture tex = new ModelTexture(loader.loadTexture("image"));
-        TexturedModel model = new TexturedModel(m, tex);
+        Entity e = new Entity(model, new Vector3f(0,0,-1), new Vector3f(0,0,0), 1);
+        
+        
         while(!Display.isCloseRequested()) {
+            e.move(new Vector3f(0,0,-0.1f));
             renderer.prepare();
             s.start();
-            renderer.render(model);
+            renderer.render(e, s);
             DisplayManager.updateDisplay();
             s.stop();
         }
