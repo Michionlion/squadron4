@@ -32,18 +32,21 @@ public class Renderer {
     
     public void render(Sprite sprite, SpriteShader shader) {
         shader.start();
-        Matrix4f tMatrix = Utils.createSpriteTransformationMatrix(sprite.getX(), sprite.getY(), sprite.getRotation(), sprite.getPriority());
+        Matrix4f tMatrix = Utils.createSpriteTransformationMatrix(sprite.getX(), sprite.getY(), sprite.getRotation(), sprite.getWidth(), sprite.getHeight(), sprite.getPriority());
         shader.loadTransformationMatrix(tMatrix);
         
-        GL30.glBindVertexArray(Globals.QUAD.getVaoID());
+        
+        
+        GL30.glBindVertexArray(Sprite.quad.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, sprite.getTex().getID());
-        GL11.glDrawElements(GL11.GL_TRIANGLES, Globals.QUAD.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+        GL11.glDrawElements(GL11.GL_TRIANGLES, Sprite.quad.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
+        
         shader.stop();
     }
 }

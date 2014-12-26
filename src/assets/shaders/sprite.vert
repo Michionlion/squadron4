@@ -11,5 +11,9 @@ uniform int windowHeight;
 
 void main(void) {
     pass_textureCoords = textureCoords;
-    gl_Position = transformationMatrix * vec4(position.x/windowWidth, position.y/windowHeight, -position.z, 1.0);
+    
+    float x = (2f/1280f)*position.x;
+    float y = (2f/720f)*position.y;
+
+    gl_Position = transformationMatrix * vec4(x, y, -position.z, 1.0);
 }

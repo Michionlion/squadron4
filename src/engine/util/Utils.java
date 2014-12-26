@@ -34,12 +34,12 @@ public class Utils {
         return createTransformationMatrix(new Vector3f(x,y,z), new Vector3f(rx,ry,rz), new Vector3f(1,1,1));
     }
     
-    public static Matrix4f createSpriteTransformationMatrix(float x, float y, float rotation, float priority) {
+    public static Matrix4f createSpriteTransformationMatrix(float x, float y, float rotation, float width, float height, float priority) {
         Matrix4f matrix = new Matrix4f();
         matrix.setIdentity();
-        Matrix4f.translate(new Vector3f(x,y,-2 + (1f/priority)), matrix, matrix);
+        Matrix4f.translate(new Vector3f(x,y,priority), matrix, matrix);
+        matrix.scale(new Vector3f(width, height, 1.0f));
         Matrix4f.rotate((float) Math.toRadians(rotation), new Vector3f(0,0,1), matrix, matrix);
-        
         return matrix;
     }
     

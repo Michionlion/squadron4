@@ -17,7 +17,6 @@ public class Globals {
     
     public static final int WIDTH = 1080;
     public static final int HEIGHT = 720;
-    public static RawModel QUAD;
     
     
     public static Input input;
@@ -30,38 +29,24 @@ public class Globals {
     public static void main(String[] args) {
         
         DisplayManager.createDisplay();
-        Loader loader = new Loader();
         SpriteShader s = new SpriteShader();
         
-        float[] verts = 
-        {0f,0f,0f,
-         0f,1f,0f,
-         1f,0f,0f,
-         1f,1f,0f};
-        
-        float[] texs = {0f,0f,1f,1f};
-        
-        int[] indices = {1,2,3, 2,4,3};
-        
-        QUAD = loader.loadToVAO(verts, texs, indices);
-        
         Renderer renderer = new Renderer();
-        Sprite sprite = new Sprite(loader.getTexture("close"), 0, 0, 0, 1);
+        Sprite sprite = new Sprite(Loader.getTexture("iconify"), 0, 0, 0, 1);
         
         while(!Display.isCloseRequested()) {
             renderer.prepare();
-            s.start();
-            
+            sprite.rotate(0.1f);
+//            sprite.translate(0.001f, 0);
             renderer.render(sprite, s);
             
             
             
             DisplayManager.updateDisplay();
-            s.stop();
         }
         
         s.cleanUp();
-        loader.cleanUp();
+        Loader.cleanUp();
         DisplayManager.closeDisplay();
     }
 }

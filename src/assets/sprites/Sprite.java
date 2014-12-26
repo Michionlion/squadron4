@@ -1,6 +1,9 @@
 package assets.sprites;
 
+import assets.models.RawModel;
 import assets.textures.Texture2D;
+import engine.Globals;
+import engine.render.Loader;
 import org.lwjgl.util.vector.Vector2f;
 
 public class Sprite {
@@ -8,15 +11,41 @@ public class Sprite {
     private Texture2D tex;
     private Vector2f pos;
     private float rotation,priority;
+    private float width,height;
+    
+    
+    public static RawModel quad = null;
+    
+    
+    
+    
 
     public Sprite(Texture2D tex, float x, float y, float rotation, float priority) {
         this.tex = tex;
         pos = new Vector2f(x,y);
         rotate(rotation);
         this.priority = priority;
+        
+        width = 200;
+        height = 200;
+        if(quad == null) setUpQuad();
     }
     
-    
+    public static void setUpQuad() {
+        float a = Globals.WIDTH/(float)Globals.HEIGHT;
+        
+        float[] verts = 
+        {-0.5f*a,-0.5f,0f,  //v1
+         -0.5f*a,0.5f,0f,  //v2
+         0.5f*a,0.5f,0f,  //v3
+         0.5f*a,-0.5f,0f};  //v4
+        
+        float[] texs = {0f,0f,1f,1f};
+        
+        int[] indices = {0,1,3, 3,1,2};
+        
+        quad = Loader.loadToVAO(verts, texs, indices);
+    }
     
     
     
@@ -32,6 +61,14 @@ public class Sprite {
 
     public Texture2D getTex() {
         return tex;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
     }
 
     public Vector2f getPos() {
