@@ -14,7 +14,7 @@ public class Sprite {
     private float width,height;
     
     
-    public static RawModel quad = null;
+    
     
     
     
@@ -28,25 +28,17 @@ public class Sprite {
         
         width = 200;
         height = 200;
-        if(quad == null) setUpQuad();
     }
     
-    public static void setUpQuad() {
-        float[] verts = 
-        {0.5f,0.5f,0f,  //v1
-         0.5f,-0.5f,0f,  //v2
-         -0.5f,-0.5f,0f,  //v3
-         -0.5f,0.5f,0f};  //v4
+    public Sprite(Texture2D tex, Vector2f position, float width, float height, float rotation) {
+        this.tex = tex;
+        pos = position;
+        setRotation(rotation);
+        priority = 1;
         
-        float[] texs = {0f,0f, 0f,1f, 1f,1f, 1f,0f};
-        
-        int[] indices = {0,1,3, 3,1,2};
-        
-        quad = Loader.loadToVAO(verts, texs, indices);
+        this.width = width;
+        this.height = height;
     }
-    
-    
-    
     
     public void rotate(float toRot) {
         rotation+=toRot;

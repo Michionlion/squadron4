@@ -25,7 +25,7 @@ public class DisplayManager {
             Logger.getLogger(Globals.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GL11.glViewport(0, 0, Globals.WIDTH, Globals.HEIGHT);
+//        GL11.glViewport(0, 0, Globals.WIDTH, Globals.HEIGHT);
     }
 
     public static void updateDisplay() {

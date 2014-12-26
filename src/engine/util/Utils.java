@@ -1,5 +1,6 @@
 package engine.util;
 
+import engine.Globals;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -53,10 +54,10 @@ public class Utils {
         Matrix4f m = new Matrix4f();
         m.setZero();
         
-        float right = -(1280f/2f);
-        float left = 1280f/2;
-        float top = 720f/2f;
-        float bottom = -720f/2f;
+        float right = -(Globals.WIDTH/2f);
+        float left = Globals.WIDTH/2f;
+        float top = Globals.HEIGHT/2f;
+        float bottom = -Globals.HEIGHT/2f;
         
         float far = -100;
         float near = 0.002f;
