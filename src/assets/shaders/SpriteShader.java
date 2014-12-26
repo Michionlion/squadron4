@@ -1,5 +1,6 @@
 package assets.shaders;
 
+import engine.Globals;
 import org.lwjgl.util.vector.Matrix4f;
 
 public class SpriteShader extends ShaderProgram {
@@ -13,6 +14,10 @@ public class SpriteShader extends ShaderProgram {
 
     public SpriteShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
+        start();
+        loadInt(location_windowWidth, Globals.WIDTH);
+        loadInt(location_windowHeight, Globals.HEIGHT);
+        stop();
     }
 
     @Override

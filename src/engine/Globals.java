@@ -3,6 +3,7 @@ package engine;
 import assets.models.RawModel;
 import assets.shaders.SpriteShader;
 import assets.shaders.StaticShader;
+import assets.sprites.Sprite;
 import engine.render.DisplayManager;
 import engine.render.Loader;
 import engine.render.Renderer;
@@ -45,13 +46,13 @@ public class Globals {
         QUAD = loader.loadToVAO(verts, texs, indices);
         
         Renderer renderer = new Renderer();
-        
+        Sprite sprite = new Sprite(loader.getTexture("close"), 0, 0, 0, 1);
         
         while(!Display.isCloseRequested()) {
             renderer.prepare();
             s.start();
             
-            //renderer.render();
+            renderer.render(sprite, s);
             
             
             
