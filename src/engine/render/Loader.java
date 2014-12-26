@@ -1,11 +1,13 @@
 package engine.render;
 
 import assets.models.RawModel;
+import assets.textures.Texture2D;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,17 +23,29 @@ public class Loader {
     
     private List<Integer> vaos = new ArrayList<>();
     private List<Integer> vbos = new ArrayList<>();
-    private List<Integer> textures = new ArrayList<>();
-    public RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices) {
+    private HashMap<String, Integer> textures = new HashMap<>();
+    
+    public RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices, boolean is2D) {
+        int posSize = 3;
+        if(is2D) posSize = 2;
         int vaoID = createVAO();
         bindIndicesBuffer(indices);
-        storeDataInAttributeList(0, 3, positions);
+        storeDataInAttributeList(0, posSize, positions);
         storeDataInAttributeList(1, 2, textureCoords);
         unbindVAO();
         return new RawModel(vaoID, indices.length);
     }
     
-    public int loadTexture(String fileName) {
+    public Texture2D getTexture(String fileName) {
+        return new Texture2D(getTextureID(fileName));
+    }
+    
+    public int getTextureID(String fileName) {
+        if(textures.containsKey(fileName)) return textures.get(fileName);
+        else return loadTexture(fileName);
+    }
+    
+    private int loadTexture(String fileName) {
         Texture tex = null;
         
         try {
@@ -44,7 +58,7 @@ public class Loader {
             return -1;
         }
         int textureID = tex.getTextureID();
-        textures.add(textureID);
+        textures.put(fileName, textureID);
         return textureID;
     }
     
