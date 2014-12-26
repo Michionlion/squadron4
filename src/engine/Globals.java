@@ -1,5 +1,7 @@
 package engine;
 
+import assets.models.RawModel;
+import assets.shaders.SpriteShader;
 import assets.shaders.StaticShader;
 import engine.render.DisplayManager;
 import engine.render.Loader;
@@ -14,6 +16,8 @@ public class Globals {
     
     public static final int WIDTH = 1080;
     public static final int HEIGHT = 720;
+    public static RawModel QUAD;
+    
     
     public static Input input;
     public static MouseInput mouseInput;
@@ -26,8 +30,21 @@ public class Globals {
         
         DisplayManager.createDisplay();
         Loader loader = new Loader();
-        StaticShader s = new StaticShader();
-        Renderer renderer = new Renderer(s);
+        SpriteShader s = new SpriteShader();
+        
+        float[] verts = 
+        {0f,0f,0f,
+         0f,1f,0f,
+         1f,0f,0f,
+         1f,1f,0f};
+        
+        float[] texs = {0f,0f,1f,1f};
+        
+        int[] indices = {1,2,3, 2,4,3};
+        
+        QUAD = loader.loadToVAO(verts, texs, indices);
+        
+        Renderer renderer = new Renderer();
         
         
         while(!Display.isCloseRequested()) {

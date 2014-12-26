@@ -25,12 +25,10 @@ public class Loader {
     private List<Integer> vbos = new ArrayList<>();
     private HashMap<String, Integer> textures = new HashMap<>();
     
-    public RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices, boolean is2D) {
-        int posSize = 3;
-        if(is2D) posSize = 2;
+    public RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices) {
         int vaoID = createVAO();
         bindIndicesBuffer(indices);
-        storeDataInAttributeList(0, posSize, positions);
+        storeDataInAttributeList(0, 3, positions);
         storeDataInAttributeList(1, 2, textureCoords);
         unbindVAO();
         return new RawModel(vaoID, indices.length);

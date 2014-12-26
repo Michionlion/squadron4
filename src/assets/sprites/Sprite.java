@@ -23,8 +23,7 @@ public class Sprite {
     
     public void rotate(float toRot) {
         rotation+=toRot;
-        if(rotation >=360) rotation-=360;
-        else if (rotation < 0) rotation+=360;
+        checkRotation();
     }
     
     public void translate(float x, float y) {
@@ -33,6 +32,35 @@ public class Sprite {
 
     public Texture2D getTex() {
         return tex;
+    }
+
+    public Vector2f getPos() {
+        return pos;
+    }
+
+    public void setPos(Vector2f pos) {
+        this.pos = pos;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
+        checkRotation();
+    }
+    
+    public void checkRotation() {
+        if(rotation >=360) {
+            rotation-=360;
+            checkRotation();
+        }
+        else if (rotation < 0) {
+            rotation+=360;
+            checkRotation();
+        }
+        
     }
 
     public float getX() {

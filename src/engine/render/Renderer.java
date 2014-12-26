@@ -24,17 +24,6 @@ public class Renderer {
     
     
     
-    
-    private Matrix4f projectionMatrix;
-    
-    public Renderer(StaticShader shader) {
-        createProjectionMatrix();
-        shader.start();
-        shader.loadProjectionMatrix(projectionMatrix);
-        shader.stop();
-    }
-    
-    
     public void prepare() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glClearColor(1,0,0,1);
@@ -43,15 +32,15 @@ public class Renderer {
     public void render(Sprite sprite, SpriteShader shader) {
         
         
-        Matrix4f tMatrix = Utils.createSpriteTransformationMatrix(sprite.getX, FOV, FOV, FOV
+        Matrix4f tMatrix = Utils.createSpriteTransformationMatrix(sprite.getX(), sprite.getY(), sprite.getRotation(), sprite.getPriority());
         shader.loadTransformationMatrix(tMatrix);
         
         GL30.glBindVertexArray(mod.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, tMod.getTexture().getID());
-        GL11.glDrawElements(GL11.GL_TRIANGLES, mod.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, sprite.getTex().getID());
+        GL11.glDrawElements(GL11.GL_TRIANGLES, QUAD, GL11.GL_UNSIGNED_INT, 0);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
