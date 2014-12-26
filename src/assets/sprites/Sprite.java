@@ -16,14 +16,18 @@ public class Sprite {
     }
     
     public Sprite(Texture2D tex, Vector2f position, float width, float height, float rotation) {
+        this(tex, position, width, height, rotation, 1);
+    }
+    public Sprite(Texture2D tex, Vector2f position, float width, float height, float rotation, float priority) {
         this.tex = tex;
         pos = position;
         setRotation(rotation);
-        priority = 1;
+        this.priority = priority;
         
         this.width = width;
         this.height = height;
     }
+    
     
     public void rotate(float toRot) {
         rotation+=toRot;
