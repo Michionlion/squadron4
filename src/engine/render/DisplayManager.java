@@ -12,21 +12,20 @@ import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayManager {
     
-    private static final int WIDTH=1280,HEIGHT=720;
     private static final int FPS_CAP = 120;
     
 
     public static void createDisplay() {
         
         try {
-            Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+            Display.setDisplayMode(new DisplayMode(Globals.WIDTH, Globals.HEIGHT));
             Display.create(new PixelFormat(), new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true));
             Display.setTitle("Squadron 4");
         } catch (LWJGLException ex) {
             Logger.getLogger(Globals.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GL11.glViewport(0, 0, WIDTH, HEIGHT);
+        GL11.glViewport(0, 0, Globals.WIDTH, Globals.HEIGHT);
     }
 
     public static void updateDisplay() {

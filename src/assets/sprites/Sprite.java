@@ -10,7 +10,7 @@ public class Sprite {
     
     private Texture2D tex;
     private Vector2f pos;
-    private float rotation,priority;
+    public float rotation,priority;
     private float width,height;
     
     
@@ -32,15 +32,13 @@ public class Sprite {
     }
     
     public static void setUpQuad() {
-        float a = Globals.WIDTH/(float)Globals.HEIGHT;
-        
         float[] verts = 
-        {-0.5f*a,-0.5f,0f,  //v1
-         -0.5f*a,0.5f,0f,  //v2
-         0.5f*a,0.5f,0f,  //v3
-         0.5f*a,-0.5f,0f};  //v4
+        {0.5f,0.5f,0f,  //v1
+         0.5f,-0.5f,0f,  //v2
+         -0.5f,-0.5f,0f,  //v3
+         -0.5f,0.5f,0f};  //v4
         
-        float[] texs = {0f,0f,1f,1f};
+        float[] texs = {0f,0f, 0f,1f, 1f,1f, 1f,0f};
         
         int[] indices = {0,1,3, 3,1,2};
         

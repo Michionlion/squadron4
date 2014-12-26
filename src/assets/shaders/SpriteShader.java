@@ -1,6 +1,7 @@
 package assets.shaders;
 
 import engine.Globals;
+import engine.util.Utils;
 import org.lwjgl.util.vector.Matrix4f;
 
 public class SpriteShader extends ShaderProgram {
@@ -17,6 +18,7 @@ public class SpriteShader extends ShaderProgram {
         start();
         loadInt(location_windowWidth, Globals.WIDTH);
         loadInt(location_windowHeight, Globals.HEIGHT);
+        loadMatrix(super.getUniformLocation("projectionMatrix"), Utils.createOrthoMatrix());
         stop();
     }
 

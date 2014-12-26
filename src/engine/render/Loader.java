@@ -108,13 +108,16 @@ public class Loader {
         for(int vao : vaos) {
             GL30.glDeleteVertexArrays(vao);
         }
+        vaos.clear();
         
         for(int vbo : vbos) {
             GL15.glDeleteBuffers(vbo);
         }
+        vbos.clear();
         
         for(int tex : textures.values()) {
             GL11.glDeleteTextures(tex);
         }
+        textures.clear();
     }
 }

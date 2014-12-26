@@ -32,12 +32,16 @@ public class Globals {
         SpriteShader s = new SpriteShader();
         
         Renderer renderer = new Renderer();
-        Sprite sprite = new Sprite(Loader.getTexture("iconify"), 0, 0, 0, 1);
+        Sprite sprite = new Sprite(Loader.getTexture("demo"), 300, 250, 0, 1);
         
         while(!Display.isCloseRequested()) {
             renderer.prepare();
-            sprite.rotate(0.1f);
-//            sprite.translate(0.001f, 0);
+            
+            
+            
+            
+            
+            
             renderer.render(sprite, s);
             
             
