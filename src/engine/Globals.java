@@ -40,7 +40,6 @@ public class Globals {
         
         Renderer renderer = new Renderer();
         Sprite sprite = new Sprite(Loader.getTexture("demo"), 0, 0, 0, 1);
-        Sprite sp2 = new Sprite(Loader.getTexture("close"), 300, 300, 0, 1);
         
         while(!Display.isCloseRequested()) {
             renderer.prepare();
@@ -52,10 +51,14 @@ public class Globals {
                 sprite.rotate(-1);
             }
             
+            if(Keyboard.isKeyDown(Keyboard.KEY_W)) sprite.translate(0, 0.2f);
+            else if(Keyboard.isKeyDown(Keyboard.KEY_S)) sprite.translate(0, -0.2f);
+            if(Keyboard.isKeyDown(Keyboard.KEY_A)) sprite.translate(0.2f, 0);
+            else if(Keyboard.isKeyDown(Keyboard.KEY_D)) sprite.translate(-0.2f, 0);
+            
             
             
             renderer.render(sprite, s);
-            renderer.render(sp2, s);
             
             
             

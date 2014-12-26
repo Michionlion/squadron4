@@ -1,9 +1,6 @@
 package assets.sprites;
 
-import assets.models.RawModel;
 import assets.textures.Texture2D;
-import engine.Globals;
-import engine.render.Loader;
 import org.lwjgl.util.vector.Vector2f;
 
 public class Sprite {
@@ -12,22 +9,10 @@ public class Sprite {
     private Vector2f pos;
     public float rotation,priority;
     private float width,height;
-    
-    
-    
-    
-    
-    
-    
 
     public Sprite(Texture2D tex, float x, float y, float rotation, float priority) {
-        this.tex = tex;
-        pos = new Vector2f(x,y);
-        rotate(rotation);
+        this(tex, new Vector2f(x,y), 50f, 50f, rotation);
         this.priority = priority;
-        
-        width = 200;
-        height = 200;
     }
     
     public Sprite(Texture2D tex, Vector2f position, float width, float height, float rotation) {
@@ -91,6 +76,8 @@ public class Sprite {
     }
 
     public float getX() {
+        width+=0.3f;
+        height+=0.3f;
         return pos.x;
     }
 
