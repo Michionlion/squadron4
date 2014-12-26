@@ -3,7 +3,9 @@ package engine.render;
 import assets.models.RawModel;
 import assets.models.TexturedModel;
 import assets.shaders.ShaderProgram;
+import assets.shaders.SpriteShader;
 import assets.shaders.StaticShader;
+import assets.sprites.Sprite;
 import engine.util.Utils;
 import entities.Entity;
 import org.lwjgl.opengl.Display;
@@ -38,13 +40,10 @@ public class Renderer {
         GL11.glClearColor(1,0,0,1);
     }
     
-    public void render(Entity entity, StaticShader shader) {
+    public void render(Sprite sprite, SpriteShader shader) {
         
         
-        TexturedModel tMod = entity.getModel();
-        RawModel mod = tMod.getRawModel();
-        
-        Matrix4f tMatrix = Utils.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
+        Matrix4f tMatrix = Utils.createSpriteTransformationMatrix(sprite.getX, FOV, FOV, FOV
         shader.loadTransformationMatrix(tMatrix);
         
         GL30.glBindVertexArray(mod.getVaoID());
@@ -56,20 +55,5 @@ public class Renderer {
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
-    }
-    
-    private void createProjectionMatrix() {
-        float aspectRatio = (float) Display.getWidth()/(float) Display.getHeight();
-        float yScale = (float) ((1f/Math.tan(Math.toRadians(FOV/2f)))*aspectRatio);
-        float xScale = yScale/aspectRatio;
-        float frustumLength = FAR - NEAR;
-        
-        projectionMatrix = new Matrix4f();
-        projectionMatrix.m00 = xScale;
-        projectionMatrix.m11 = yScale;
-        projectionMatrix.m22 = -((FAR+NEAR)/frustumLength);
-        projectionMatrix.m23 = -1;
-        projectionMatrix.m32 = -((2*FAR*NEAR)/frustumLength);
-        projectionMatrix.m33 = 0;
     }
 }

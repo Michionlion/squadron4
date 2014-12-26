@@ -1,10 +1,10 @@
 package assets.textures;
 
-public class ModelTexture {
+public class Texture2D {
     
     private int textureID;
     
-    public ModelTexture(int id) {
+    public Texture2D(int id) {
         this.textureID = id;
     }
     

@@ -1,13 +1,13 @@
 package assets.models;
 
-import assets.textures.ModelTexture;
+import assets.textures.Texture2D;
 
 public class TexturedModel {
     
     private RawModel rawModel;
-    private ModelTexture texture;
+    private Texture2D texture;
     
-    public TexturedModel(RawModel model, ModelTexture tex) {
+    public TexturedModel(RawModel model, Texture2D tex) {
         this.rawModel = model;
         this.texture = tex;
     }
@@ -16,7 +16,7 @@ public class TexturedModel {
         return rawModel;
     }
 
-    public ModelTexture getTexture() {
+    public Texture2D getTexture() {
         return texture;
     }
     

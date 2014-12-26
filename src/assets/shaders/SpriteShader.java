@@ -8,9 +8,10 @@ public class SpriteShader extends ShaderProgram {
     private static final String FRAGMENT_FILE = "src/assets/shaders/sprite.frag";
     
     private int location_transformationMatrix;
-    private int location_projectionMatrix;
+    private int location_windowWidth;
+    private int location_windowHeight;
 
-    public SpriteShader(String vertexFile, String fragmentFile) {
+    public SpriteShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
     }
 
@@ -23,6 +24,8 @@ public class SpriteShader extends ShaderProgram {
     @Override
     protected void getAllUniformLocations() {
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
+        location_windowWidth = super.getUniformLocation("windowWidth");
+        location_windowHeight = super.getUniformLocation("windowHeight");
     }
     
     public void loadTransformationMatrix(Matrix4f matrix) {
