@@ -49,7 +49,7 @@ public class Loader {
         Texture tex = null;
         
         try {
-            tex = TextureLoader.getTexture("PNG", new FileInputStream("res/"+fileName+".png"));
+            tex = TextureLoader.getTexture("PNG", new FileInputStream("res/art/"+fileName+".png"));
         } catch (IOException ex) {
             Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -114,7 +114,7 @@ public class Loader {
             GL15.glDeleteBuffers(vbo);
         }
         
-        for(int tex : textures) {
+        for(int tex : textures.values()) {
             GL11.glDeleteTextures(tex);
         }
     }
