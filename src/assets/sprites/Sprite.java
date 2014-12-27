@@ -37,6 +37,10 @@ public class Sprite {
     public void translate(float x, float y) {
         pos.translate(x, y);
     }
+    
+    public void translate(Vector2f t) {
+        Vector2f.add(pos, t, pos);
+    }
 
     public Texture2D getTex() {
         return tex;
@@ -54,7 +58,7 @@ public class Sprite {
         return pos;
     }
 
-    public void setPos(Vector2f pos) {
+    public final void setPos(Vector2f pos) {
         this.pos = pos;
     }
 
@@ -62,7 +66,7 @@ public class Sprite {
         return rotation;
     }
 
-    public void setRotation(float rotation) {
+    public final void setRotation(float rotation) {
         this.rotation = rotation;
         checkRotation();
     }
@@ -93,7 +97,7 @@ public class Sprite {
         return priority;
     }
 
-    public void setPriority(float priority) {
+    public final void setPriority(float priority) {
         this.priority = priority;
     }
     
