@@ -18,6 +18,11 @@ public class Collider implements Collidable {
         this.rotation = rotation;
     }
     
+    public Collider(float x, float y, float width, float height, float rotation) {
+        this(new Area(new Rectangle.Float(x, y, width, height)));
+        this.rotation = rotation;
+    }
+    
     public Collider(Area a) {
         collision = a;
         rotation = 0;
@@ -25,6 +30,19 @@ public class Collider implements Collidable {
     
     public void rotate(float toRot) {
         rotation+=toRot;
+        checkRotation();
+    }
+    
+    public void checkRotation() {
+        if(rotation >=360) {
+            rotation-=360;
+            checkRotation();
+        }
+        else if (rotation < 0) {
+            rotation+=360;
+            checkRotation();
+        }
+        
     }
     
     @Override

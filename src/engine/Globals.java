@@ -1,19 +1,11 @@
 package engine;
 
+import engine.interfaces.RenderObject;
 import engine.interfaces.Tickable;
 import engine.render.Renderer;
-import engine.util.Utils;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 
@@ -28,7 +20,7 @@ public class Globals {
     public static Renderer RENDERER = new Renderer();
     
     public static CopyOnWriteArrayList<GameObject> gameObjects;
-
+    public static CopyOnWriteArrayList<RenderObject> renderObjects;
     
     
     
@@ -47,11 +39,13 @@ public class Globals {
     public static void add(Object o) {
         if(o instanceof Tickable) TICKER.add((Tickable) o);
         if(o instanceof GameObject) gameObjects.add((GameObject) o);
+        if(o instanceof RenderObject) renderObjects.add((RenderObject) o);
     }
     
     public static void remove(Object o) {
         if(o instanceof Tickable) if(TICKER.isTicking((Tickable) o)) TICKER.remove((Tickable) o);
         if(o instanceof GameObject) if(gameObjects.contains((GameObject)o)) gameObjects.remove((GameObject) o);
+        if(o instanceof RenderObject) if(renderObjects.contains((RenderObject)o)) renderObjects.remove((RenderObject) o);
     }
     
     
@@ -61,7 +55,7 @@ public class Globals {
      * @return The system time in milliseconds
      */
     public static double getTime() {
-        return (Sys.getTime() * 1000d) / Sys.getTimerResolution();
+        return (System.nanoTime()* 1000d) / 1_000_000_000d;
     }
 
     public static void main(String[] args) {

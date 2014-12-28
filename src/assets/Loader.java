@@ -1,4 +1,4 @@
-package engine.render;
+package assets;
 
 import assets.models.RawModel;
 import java.io.FileInputStream;

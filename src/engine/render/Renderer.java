@@ -1,25 +1,18 @@
 package engine.render;
 
+import assets.Loader;
 import assets.models.RawModel;
 import assets.shaders.SpriteShader;
 import assets.sprites.Sprite;
 import engine.Globals;
-import static engine.Globals.RENDERER;
 import engine.interfaces.Interpolatable;
 import engine.util.Utils;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -38,6 +31,9 @@ public class Renderer implements Runnable {
     public float interpolation;
 
     public static RawModel QUAD;
+    
+    public RawModel boundModel;
+    public Texture boundTexture;
 
     private double now = System.nanoTime();
     Area aaa = null;
@@ -65,6 +61,10 @@ public class Renderer implements Runnable {
             Logger.getLogger(Renderer.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
+        
+        
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -72,6 +72,9 @@ public class Renderer implements Runnable {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
+        
+        
+        
         float[] verts
                 = {0.5f, 0.5f, 0f, //v1
                     0.5f, -0.5f, 0f, //v2
@@ -81,15 +84,17 @@ public class Renderer implements Runnable {
         int[] indices = {0, 1, 3, 3, 1, 2};
 
         QUAD = Loader.loadToVAO(verts, texs, indices);
-
+        
+        
+        
         //render loop
         SpriteShader s = new SpriteShader();
-        Sprite sprite = new Sprite(Loader.getTexture("debug"), new Vector2f(0, 0), 512, 512, 0);
+        Sprite sprite = new Sprite(Loader.getTexture("debug"), new Vector2f(0, 0), 1000, 1000, 0);
 //        MovingSprite sprite2 = new MovingSprite(Loader.getTexture("debug"), new Vector2f(-100, 300), 0, new Vector2f(0, -3.6f), new Vector2f(512,512), 1);
 //        Globals.add(sprite2);
         while (!Display.isCloseRequested()) {
             now = Globals.getTime();
-            Display.setTitle("Squadron 4   -   TPS: " + Globals.TICKER.getTPS());
+            
 
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
                 break;
@@ -101,9 +106,13 @@ public class Renderer implements Runnable {
             render(sprite, s);
 //            render(sprite2, s);
 
-            DisplayManager.updateDisplay();
-
+            
+            
             renders++;
+            double renderTime = Globals.getTime() - now;
+            System.out.println("render " + renders + " done in " + renderTime + "ms.");
+            Display.setTitle("Squadron 4   -   TPS: " + Globals.TICKER.getTPS());
+            DisplayManager.updateDisplay();
         }
 
         Globals.TICKER.end();

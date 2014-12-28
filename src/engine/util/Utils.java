@@ -1,18 +1,10 @@
 package engine.util;
 
 import engine.Globals;
-import engine.render.Loader;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Area;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
 
 public class Utils {
 
