@@ -1,13 +1,13 @@
 package assets.models;
 
-import assets.textures.Texture2D;
+import org.newdawn.slick.opengl.Texture;
 
 public class TexturedModel {
     
     private RawModel rawModel;
-    private Texture2D texture;
+    private Texture texture;
     
-    public TexturedModel(RawModel model, Texture2D tex) {
+    public TexturedModel(RawModel model, Texture tex) {
         this.rawModel = model;
         this.texture = tex;
     }
@@ -16,7 +16,7 @@ public class TexturedModel {
         return rawModel;
     }
 
-    public Texture2D getTexture() {
+    public Texture getTexture() {
         return texture;
     }
     

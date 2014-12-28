@@ -1,0 +1,58 @@
+package engine;
+
+import engine.interfaces.Collidable;
+import engine.interfaces.InputListener;
+import engine.util.Utils;
+import java.awt.Rectangle;
+import java.awt.geom.Area;
+import java.util.ArrayList;
+
+public class Collider implements Collidable {
+    
+    protected ArrayList<InputListener> hitListeners;
+    protected Area collision = new Area();
+    private float rotation;
+    
+    public Collider(float x, float y, float rotation) {
+        this(new Area(new Rectangle.Float(x, y, 20, 20)));
+        this.rotation = rotation;
+    }
+    
+    public Collider(Area a) {
+        collision = a;
+        rotation = 0;
+    }
+    
+    public void rotate(float toRot) {
+        rotation+=toRot;
+    }
+    
+    @Override
+    public Area getCollision() {
+        return collision;
+    }
+    
+    @Override
+    public Rectangle getBoxCollision() {
+        return collision.getBounds();
+    }
+
+    @Override
+    public boolean isColliding(Collider c) {
+        return Utils.isIntersecting(collision, c.collision);
+    }
+    
+    public Area getIntersection(Collider c) {
+        return Utils.getIntersection(collision, c.collision);
+    }
+
+    @Override
+    public void addListener(InputListener i) {
+        hitListeners.add(i);
+    }
+
+    @Override
+    public void removeListener(InputListener i) {
+        hitListeners.remove(i);
+    }
+}

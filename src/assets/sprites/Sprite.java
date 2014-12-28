@@ -1,24 +1,24 @@
 package assets.sprites;
 
-import assets.textures.Texture2D;
 import org.lwjgl.util.vector.Vector2f;
+import org.newdawn.slick.opengl.Texture;
 
 public class Sprite {
     
-    private Texture2D tex;
+    private Texture tex;
     private Vector2f pos;
     public float rotation,priority;
     private float width,height;
 
-    public Sprite(Texture2D tex, float x, float y, float rotation, float priority) {
+    public Sprite(Texture tex, float x, float y, float rotation, float priority) {
         this(tex, new Vector2f(x,y), 50f, 50f, rotation);
         this.priority = priority;
     }
     
-    public Sprite(Texture2D tex, Vector2f position, float width, float height, float rotation) {
+    public Sprite(Texture tex, Vector2f position, float width, float height, float rotation) {
         this(tex, position, width, height, rotation, 1);
     }
-    public Sprite(Texture2D tex, Vector2f position, float width, float height, float rotation, float priority) {
+    public Sprite(Texture tex, Vector2f position, float width, float height, float rotation, float priority) {
         this.tex = tex;
         pos = position;
         setRotation(rotation);
@@ -42,7 +42,7 @@ public class Sprite {
         Vector2f.add(pos, t, pos);
     }
 
-    public Texture2D getTex() {
+    public Texture getTex() {
         return tex;
     }
 
@@ -84,8 +84,6 @@ public class Sprite {
     }
 
     public float getX() {
-        width+=0.3f;
-        height+=0.3f;
         return pos.x;
     }
 

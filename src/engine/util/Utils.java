@@ -1,12 +1,22 @@
 package engine.util;
 
 import engine.Globals;
+import engine.render.Loader;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.Area;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
 
 public class Utils {
 
-    // TRANSFORMATION MATRIX CREATION
+    // MATRIX CREATION
     public static Matrix4f createTransformationMatrix(Vector3f translation, Vector3f rotation, Vector3f scale) {
         Matrix4f matrix = new Matrix4f();
         matrix.setIdentity();
@@ -48,8 +58,7 @@ public class Utils {
         matrix.scale(new Vector3f(width, height, 1.0f));
         return matrix;
     }
-
-    //OTHER STUFF
+    
     public static Matrix4f createOrthoMatrix() {
         Matrix4f m = new Matrix4f();
         m.setZero();
@@ -85,4 +94,29 @@ public class Utils {
         return m;
     }
 
+    //OTHER STUFF
+    
+    public static boolean isIntersecting(Shape a, Shape b) {
+        Area aa = new Area(a);
+        aa.intersect(new Area(b));
+        return !aa.isEmpty();
+    }
+    
+    public static boolean isIntersecting(Area a, Area b) {
+        a.intersect(b);
+        return !a.isEmpty();
+    }
+    
+    public static Area getIntersection(Area a, Area b) {
+        a.intersect(b);
+        return a;
+    }
+    
+    public static Area getIntersection(Shape a, Shape b) {
+        Area aa = new Area(a);
+        aa.intersect(new Area(b));
+        return aa;
+    }
+    
+    
 }

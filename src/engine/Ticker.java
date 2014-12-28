@@ -1,27 +1,35 @@
 package engine;
 
 import engine.interfaces.Tickable;
-import java.awt.event.KeyEvent;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.Display;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-public class TickThread extends Thread {
+public class Ticker implements Runnable {
 
     public float MILLIS_PER_FRAME;
+    
+    ScheduledExecutorService scheduler;
+    
     public double lastTickTime = Globals.getTime();
     private double lastFPS = Globals.getTime();
     private boolean running;
     private int tps;
+    public final int targetTPS;
     private int ticks = 0;
     private long totalTicks = 0;
 
     private volatile CopyOnWriteArrayList<Tickable> entities = new CopyOnWriteArrayList<>();
 
     
-    public TickThread(int tps) {
+    public Ticker(int tps) {
         MILLIS_PER_FRAME = 1_000 / tps;
-        this.tps = tps;
+        targetTPS = tps;
+        
+        this.tps = -1;
+        
+        scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
     @Override
@@ -29,21 +37,8 @@ public class TickThread extends Thread {
         running = true;
         lastTickTime = Globals.getTime();
         lastFPS = Globals.getTime();
-        while (running) {
-            
-            logic();
-            lastTickTime = Globals.getTime();
-            
-            
-            if (Globals.getTime() - lastTickTime > 1000) {
-                Display.setTitle("Squadron 4   -   " + ticks);
-                tps = ticks;
-                ticks = 0;
-                lastTickTime += 1000;
-            }
-            ticks++;
-            
-        }
+        //TimeUnit.SECONDS.toNanos(1)/60, TimeUnit.NANOSECONDS
+        scheduler.scheduleAtFixedRate(new Tick(), TimeUnit.MILLISECONDS.toNanos(30), TimeUnit.SECONDS.toNanos(1)/targetTPS, TimeUnit.NANOSECONDS);
     }
 
     public void logic() {
@@ -53,37 +48,12 @@ public class TickThread extends Thread {
                 e.tick();
             }
         }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-            esced();
-        }
         totalTicks++;
-
-    }
-
-    public static void sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (Exception e) {
-        }
-    }
-
-    public static void sleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-        }
-    }
-
-    public static void sleep(int millis, int nanos) {
-        try {
-            Thread.sleep(millis, nanos);
-        } catch (InterruptedException e) {
-        }
     }
 
     public void end() {
         running = false;
+        scheduler.shutdownNow();
     }
 
     public void add(Tickable e) {
@@ -101,11 +71,25 @@ public class TickThread extends Thread {
         return entities.contains(e);
     }
 
-    public int getFPS() {
+    public int getTPS() {
         return tps;
     }
+    
+    
+    private class Tick implements Runnable {
 
-    private synchronized void esced() {
-        notifyAll();
+        @Override
+        public void run() {
+            if(!running) return;
+            logic();
+            lastTickTime = Globals.getTime();
+            if (Globals.getTime() - lastFPS > 1000) {
+                tps = ticks;
+                ticks = 0;
+                lastFPS += 1000;
+            }
+            ticks++;
+        }
+        
     }
 }

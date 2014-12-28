@@ -12,7 +12,7 @@ import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayManager {
     
-    private static final int FPS_CAP = 240;
+
     
 
     public static void createDisplay() {
@@ -29,7 +29,7 @@ public class DisplayManager {
     }
 
     public static void updateDisplay() {
-        Display.sync(FPS_CAP);
+        Display.sync(Globals.FPS_CAP);
         Display.update();
         
     }

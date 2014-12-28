@@ -1,7 +1,6 @@
 package engine.render;
 
 import assets.models.RawModel;
-import assets.textures.Texture2D;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -23,7 +22,7 @@ public class Loader {
     
     private static List<Integer> vaos = new ArrayList<>();
     private static List<Integer> vbos = new ArrayList<>();
-    private static HashMap<String, Integer> textures = new HashMap<>();
+    private static HashMap<String, Texture> textures = new HashMap<>();
     
     public static RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices) {
         int vaoID = createVAO();
@@ -34,16 +33,17 @@ public class Loader {
         return new RawModel(vaoID, indices.length);
     }
     
-    public static Texture2D getTexture(String fileName) {
-        return new Texture2D(getTextureID(fileName));
-    }
-    
-    public static int getTextureID(String fileName) {
+    public static Texture getTexture(String fileName) {
         if(textures.containsKey(fileName)) return textures.get(fileName);
         else return loadTexture(fileName);
     }
     
-    private static int loadTexture(String fileName) {
+    public static int getTextureID(String fileName) {
+        if(textures.containsKey(fileName)) return textures.get(fileName).getTextureID();
+        else return loadTexture(fileName).getTextureID();
+    }
+    
+    private static Texture loadTexture(String fileName) {
         Texture tex = null;
         
         try {
@@ -54,11 +54,10 @@ public class Loader {
         }
         if(tex == null) {
             System.err.println("unable to load texture: " + fileName);
-            return -1;
+            return null;
         }
-        int textureID = tex.getTextureID();
-        textures.put(fileName, textureID);
-        return textureID;
+        textures.put(fileName, tex);
+        return tex;
     }
     
     private static int createVAO() {
@@ -115,8 +114,8 @@ public class Loader {
         }
         vbos.clear();
         
-        for(int tex : textures.values()) {
-            GL11.glDeleteTextures(tex);
+        for(Texture tex : textures.values()) {
+            GL11.glDeleteTextures(tex.getTextureID());
         }
         textures.clear();
     }
