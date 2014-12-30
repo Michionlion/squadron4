@@ -1,10 +1,11 @@
 package assets.shaders;
 
 import engine.Globals;
-import engine.util.Utils;
+import engine.interfaces.Shader;
+import engine.util.Util;
 import org.lwjgl.util.vector.Matrix4f;
 
-public class SpriteShader extends ShaderProgram {
+public class SpriteShader extends ShaderProgram implements Shader {
     
     private static final String VERTEX_FILE = "src/assets/shaders/sprite.vert";
     private static final String FRAGMENT_FILE = "src/assets/shaders/sprite.frag";
@@ -18,7 +19,7 @@ public class SpriteShader extends ShaderProgram {
         start();
         loadInt(location_windowWidth, Globals.WIDTH);
         loadInt(location_windowHeight, Globals.HEIGHT);
-        loadMatrix(super.getUniformLocation("projectionMatrix"), Utils.createOrthoMatrix());
+        loadMatrix(super.getUniformLocation("projectionMatrix"), Util.createOrthoMatrix());
         stop();
     }
 

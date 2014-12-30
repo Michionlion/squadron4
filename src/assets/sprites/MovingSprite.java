@@ -7,7 +7,7 @@ import org.newdawn.slick.opengl.Texture;
 
 public class MovingSprite extends Sprite implements Interpolatable, Tickable {
 
-    Vector2f delta;
+    protected Vector2f delta;
     
     public MovingSprite(Texture tex, Vector2f pos, float rotation, Vector2f delta, Vector2f size, float priority) {
         super(tex, pos,size.x, size.y, rotation, priority);
@@ -16,7 +16,6 @@ public class MovingSprite extends Sprite implements Interpolatable, Tickable {
 
     @Override
     public void tick() {
-        
         super.translate(delta.x, delta.y);
     }
     

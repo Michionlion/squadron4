@@ -16,9 +16,4 @@ public abstract class WorldObject extends MovingSprite {
     public void setLocation(float x, float y) {
         setPos(new Vector2f(x,y));
     }
-    
-    public boolean isVisible() {
-        //TODO
-        return true;
-    }
 }

@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.Rectangle;
 
 public class Globals {
 
@@ -18,16 +19,13 @@ public class Globals {
 
     public static Ticker TICKER = new Ticker(30);
     public static Renderer RENDERER = new Renderer();
+    public static Client CLIENT;
+    
     
     public static CopyOnWriteArrayList<GameObject> gameObjects;
     public static CopyOnWriteArrayList<RenderObject> renderObjects;
     
-    
-    
-    
-    
-    
-    
+    public static Rectangle viewArea = new Rectangle(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     
     
     
@@ -49,21 +47,35 @@ public class Globals {
     }
     
     
+    public static String getUserName() {
+        return "NO_USERNAME_SUPPORT";
+    }
+    
+    public static boolean isMulti() {
+        return false;
+    }
+    
     /**
      * Get the time in milliseconds
      *
      * @return The system time in milliseconds
      */
     public static double getTime() {
-        return (System.nanoTime()* 1000d) / 1_000_000_000d;
+        return System.nanoTime() / 1_000_000d;
     }
-
-    public static void main(String[] args) {
-//        System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
-//        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
-        
+    
+    protected static void initArrays() {
+        gameObjects = new CopyOnWriteArrayList<>();
+        renderObjects = new CopyOnWriteArrayList<>();
+    }
+    
+    protected static void startGame() {
         Thread renderThread = new Thread(RENDERER, "renderThread");
         Thread tickThread = new Thread(TICKER, "tickThread");
+        
+        initArrays();
+        
+        
         renderThread.start();
         while(!Display.isCreated()) {
             try {
@@ -73,8 +85,13 @@ public class Globals {
             }
         }
         tickThread.start();
+    }
+
+    public static void main(String[] args) {
+//        System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
+//        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
         
         
-        
+        startGame();
     }
 }

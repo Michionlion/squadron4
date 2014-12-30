@@ -1,14 +1,18 @@
 package assets.sprites;
 
+import engine.Globals;
+import engine.interfaces.RenderObject;
+import engine.util.Util;
+import org.lwjgl.util.Point;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
-public class Sprite {
+public class Sprite implements RenderObject {
     
-    private Texture tex;
-    private Vector2f pos;
+    protected Texture tex;
+    protected Vector2f pos;
     public float rotation,priority;
-    private float width,height;
+    protected float width,height;
 
     public Sprite(Texture tex, float x, float y, float rotation, float priority) {
         this(tex, new Vector2f(x,y), 50f, 50f, rotation);
@@ -83,10 +87,12 @@ public class Sprite {
         
     }
 
+    @Override
     public float getX() {
         return pos.x;
     }
 
+    @Override
     public float getY() {
         return pos.y;
     }
@@ -98,7 +104,9 @@ public class Sprite {
     public final void setPriority(float priority) {
         this.priority = priority;
     }
-    
-    
-    
+
+    @Override
+    public boolean isVisible() {
+        return Globals.viewArea.contains(new Point(Util.r(pos.x), Util.r(pos.y)));
+    }
 }

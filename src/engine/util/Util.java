@@ -4,9 +4,10 @@ import engine.Globals;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-public class Utils {
+public class Util {
 
     // MATRIX CREATION
     public static Matrix4f createTransformationMatrix(Vector3f translation, Vector3f rotation, Vector3f scale) {
@@ -108,6 +109,20 @@ public class Utils {
         Area aa = new Area(a);
         aa.intersect(new Area(b));
         return aa;
+    }
+    
+    public static Vector2f setMagnitudeOfVector2f(Vector2f vec, float scale) {
+        vec.normalise();
+        vec.scale(scale);
+        return vec;
+    }
+    
+    public static int r(double num) {
+        return (int) Math.round(num);
+    }
+    
+    public static int r(float num) {
+        return Math.round(num);
     }
     
     

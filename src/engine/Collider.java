@@ -2,7 +2,7 @@ package engine;
 
 import engine.interfaces.Collidable;
 import engine.interfaces.InputListener;
-import engine.util.Utils;
+import engine.util.Util;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.util.ArrayList;
@@ -57,11 +57,11 @@ public class Collider implements Collidable {
 
     @Override
     public boolean isColliding(Collider c) {
-        return Utils.isIntersecting(collision, c.collision);
+        return Util.isIntersecting(collision, c.collision);
     }
     
     public Area getIntersection(Collider c) {
-        return Utils.getIntersection(collision, c.collision);
+        return Util.getIntersection(collision, c.collision);
     }
 
     @Override
