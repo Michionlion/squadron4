@@ -2,14 +2,16 @@ package engine.render;
 
 import assets.Loader;
 import assets.models.RawModel;
+import assets.shaders.BloomSpriteShader;
 import assets.shaders.ShaderProgram;
-import assets.shaders.SpriteShader;
+import assets.shaders.BasicSpriteShader;
 import assets.sprites.MovingSprite;
 import assets.sprites.Sprite;
 import engine.Globals;
 import engine.interfaces.Interpolatable;
 import engine.interfaces.RenderObject;
 import engine.interfaces.Shader;
+import engine.interfaces.SpriteShader;
 import engine.util.Util;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
@@ -26,6 +28,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
@@ -67,6 +70,11 @@ public class Renderer implements Runnable {
             Sys.alert("ERROR 3", "Unable to create Input Devices!");
             Logger.getLogger(Renderer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        if (!GLContext.getCapabilities().GL_EXT_framebuffer_object) {
+            System.out.println("OpenGL render to FBO not supported on this platform, exiting!");
+            System.exit(0);
+        }
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
@@ -74,9 +82,10 @@ public class Renderer implements Runnable {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-//        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 0);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
         float[] verts
                 = {0.5f, 0.5f, 0f, //v1
@@ -89,9 +98,11 @@ public class Renderer implements Runnable {
         QUAD = Loader.loadToVAO(verts, texs, indices);
 
         //render loop
-        SpriteShader s = new SpriteShader();
-        MovingSprite sprite2 = new MovingSprite(Loader.getTexture("debug"), new Vector2f(0, 0), 0, new Vector2f(0, 0), new Vector2f(512,512), 1);
-        Globals.add(sprite2);
+        BasicSpriteShader s = new BasicSpriteShader();
+        BloomSpriteShader b = new BloomSpriteShader();
+        MovingSprite sprite1 = new MovingSprite(Loader.getTexture("spaceship-off"), new Vector2f(50, 0), 0, new Vector2f(0, 0), new Vector2f(40,40), 1);
+        MovingSprite sprite2 = new MovingSprite(Loader.getTexture("spaceship-off2"), new Vector2f(-50, 0), 0, new Vector2f(0, 0), new Vector2f(40,40), 1);
+//        Globals.add(sprite);
         while (!Display.isCloseRequested()) {
             now = Globals.getTime();
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -102,36 +113,44 @@ public class Renderer implements Runnable {
             } else {
                 interpolation = 1;
             }
-            prepare();
+            clearRender();
 
-            GL30.glBindVertexArray(QUAD.getVaoID());
-            GL20.glEnableVertexAttribArray(0);
-            GL20.glEnableVertexAttribArray(1);
-            GL13.glActiveTexture(GL13.GL_TEXTURE0);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, Loader.getTextureID("spaceship-off"));
-
-            for (RenderObject toRender : Globals.renderObjects) {
-                if (toRender.isVisible()) {
-                    if (toRender instanceof Sprite) {
-                        render((Sprite) toRender, s);
-                    }
-                }
+            // --SPRITE RENDER--
+            prepareSpriteRender();
+//            for (RenderObject toRender : Globals.renderObjects) {
+//                if (toRender.isVisible()) {
+//                    if (toRender instanceof Sprite) {
+//                        renderSprite((Sprite) toRender, b);
+//                    }
+//                }
+//            }
+            if(Keyboard.isKeyDown(Keyboard.KEY_E)) {
+                sprite1.rotate(0.6f);
+                sprite2.rotate(0.6f);
+            } else if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+                sprite1.rotate(-0.6f);
+                sprite2.rotate(-0.6f);
             }
+            
+            renderSprite(sprite2, b);
+            renderSprite(sprite1, b);
+            
+            sprite1.tick();
+            sprite2.tick();
+            endSpriteRender();
+            // --END SPRITE RENDER--
 
-            GL20.glDisableVertexAttribArray(0);
-            GL20.glDisableVertexAttribArray(1);
-            GL30.glBindVertexArray(0);
-
+            GL11.glFinish();
+            
             if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
                 isInterpolating = true;
             }
             if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
                 isInterpolating = false;
             }
-            GL11.glFinish();
             renders++;
             double renderTime = Globals.getTime() - now;
-            System.out.println("render " + renders + " done in " + renderTime + "ms.");
+//            System.out.println("render " + renders + " done in " + renderTime + "ms.");
             Display.setTitle("Squadron 4  -  TPS: " + Globals.TICKER.getTPS() + "  -  Sprites: " + Globals.renderObjects.size());
             DisplayManager.updateDisplay();
         }
@@ -145,35 +164,44 @@ public class Renderer implements Runnable {
         DisplayManager.closeDisplay();
     }
 
-    public void prepare() {
-        GL11.glClearColor(0, 0, 1, 1);
+    public void clearRender() {
+        GL11.glClearColor(0, 0, 0, 1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
+    
+    public void prepareSpriteRender() {
+        GL30.glBindVertexArray(QUAD.getVaoID());
+        GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+    }
+    
+    public void endSpriteRender() {
+        GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
+        GL30.glBindVertexArray(0);
+    }
 
-    public void render(Sprite toRender, Shader shader) {
+    public void renderSprite(Sprite toRender, SpriteShader shader) {
         shader.start();
         Matrix4f tMatrix;
         if (toRender instanceof Interpolatable) {
             Interpolatable i = (Interpolatable) toRender;
-//            System.out.println("Interpolating: " + i);
             tMatrix = Util.createSpriteTransformationMatrix(toRender.getX() + (i.getDeltaX() * interpolation), toRender.getY() + (i.getDeltaY() * interpolation), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
         } else {
             tMatrix = Util.createSpriteTransformationMatrix(toRender.getX(), toRender.getY(), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
         }
+        
         shader.loadTransformationMatrix(tMatrix);
 
-//        GL30.glBindVertexArray(QUAD.getVaoID());
-//        GL20.glEnableVertexAttribArray(0);
-//        GL20.glEnableVertexAttribArray(1);
-//        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-//        GL11.glBindTexture(GL11.GL_TEXTURE_2D, toRender.getTex().getTextureID());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, toRender.getTex().getTextureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES, QUAD.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-//        GL20.glDisableVertexAttribArray(0);
-//        GL20.glDisableVertexAttribArray(1);
-//        GL30.glBindVertexArray(0);
-
         shader.stop();
     }
+    
+    
+    
+    
 
     public Area createAreaFromImage(String fileName, byte cutoff) {
 
