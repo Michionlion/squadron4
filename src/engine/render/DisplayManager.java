@@ -30,7 +30,7 @@ public class DisplayManager {
 
     public static void updateDisplay() {
         Display.update();
-        Display.sync(Globals.FPS_CAP);
+//        Display.sync(Globals.FPS_CAP);
     }
 
     public static void closeDisplay() {

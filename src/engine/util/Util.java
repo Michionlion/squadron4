@@ -45,26 +45,66 @@ public class Util {
     public static Matrix4f createSpriteTransformationMatrix(float x, float y, float rotation, float width, float height, float priority) {
         Matrix4f matrix = new Matrix4f();
         matrix.setIdentity();
-        Matrix4f.translate(new Vector3f(x, y, priority), matrix, matrix);
+//        Matrix4f.translate(new Vector3f(x+(width/2f), y+(height/2f), priority), matrix, matrix);
+        Matrix4f.translate(new Vector3f(x, -y, priority), matrix, matrix);
 
         Matrix4f.rotate((float) Math.toRadians(rotation), new Vector3f(0, 0, 1), matrix, matrix);
         matrix.scale(new Vector3f(width, height, 1.0f));
         return matrix;
     }
-    
+
+    public static Matrix4f createOrthoMatrix(boolean ignore) {
+        Matrix4f m = new Matrix4f();
+        m.setZero();
+
+        float r = Globals.WIDTH;
+        float l = 0;
+        float t = 0;
+        float b = Globals.HEIGHT;
+
+        float f = -1;
+        float n = 1f;
+
+        m.m00 = 2.0f / (r - l);
+        m.m01 = 0.0f;
+        m.m02 = 0.0f;
+        m.m03 = 0.0f;
+
+        m.m10 = 0.0f;
+        m.m11 = 2.0f / (t - b);
+        m.m12 = 0.0f;
+        m.m13 = 0.0f;
+
+        m.m20 = 0.0f;
+        m.m21 = 0.0f;
+        m.m22 = -2.0f / (f - n);
+        m.m23 = 0.0f;
+
+        m.m30 = -((r + l) / (r - l));
+        m.m31 = ((t + b) / (t - b));
+        m.m32 = -((f + n) / (f - n));
+        m.m33 = 1.0f;
+        return m;
+    }
+
     public static Matrix4f createOrthoMatrix() {
+        
         Matrix4f m = new Matrix4f();
         m.setZero();
         
-        float right = -(Globals.WIDTH/2f);
-        float left = Globals.WIDTH/2f;
-        float top = Globals.HEIGHT/2f;
-        float bottom = -Globals.HEIGHT/2f;
-        
+        //float right = -(Globals.WIDTH / 2f);
+        //float left = Globals.WIDTH / 2f;
+        //float top = Globals.HEIGHT / 2f;
+        //float bottom = -Globals.HEIGHT / 2f;
+
+        float right = -(Globals.WIDTH / 2f);
+        float left = (Globals.WIDTH / 2f);
+        float top = Globals.HEIGHT / 2f;
+        float bottom = -Globals.HEIGHT / 2f;
+
         float far = -100;
         float near = 0.002f;
-        
-        
+
         m.m00 = 2.0f / (right - left);
         m.m01 = 0.0f;
         m.m02 = 0.0f;
@@ -88,42 +128,40 @@ public class Util {
     }
 
     //OTHER STUFF
-    
     public static boolean isIntersecting(Shape a, Shape b) {
         Area aa = new Area(a);
         aa.intersect(new Area(b));
         return !aa.isEmpty();
     }
-    
+
     public static boolean isIntersecting(Area a, Area b) {
         a.intersect(b);
         return !a.isEmpty();
     }
-    
+
     public static Area getIntersection(Area a, Area b) {
         a.intersect(b);
         return a;
     }
-    
+
     public static Area getIntersection(Shape a, Shape b) {
         Area aa = new Area(a);
         aa.intersect(new Area(b));
         return aa;
     }
-    
+
     public static Vector2f setMagnitudeOfVector2f(Vector2f vec, float scale) {
         vec.normalise();
         vec.scale(scale);
         return vec;
     }
-    
+
     public static int r(double num) {
         return (int) Math.round(num);
     }
-    
+
     public static int r(float num) {
         return Math.round(num);
     }
-    
-    
+
 }

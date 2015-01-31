@@ -79,7 +79,7 @@ public class Globals {
         renderThread.start();
         while(!Display.isCreated()) {
             try {
-            Thread.sleep(1);
+            Thread.sleep(5);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Globals.class.getName()).log(Level.SEVERE, null, ex);
             }

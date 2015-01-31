@@ -12,15 +12,11 @@ public class BasicSpriteShader extends ShaderProgram implements SpriteShader {
     private static final String FRAGMENT_FILE = "src/assets/shaders/sprite.frag";
     
     private int location_transformationMatrix;
-    private int location_windowWidth;
-    private int location_windowHeight;
 
     public BasicSpriteShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
         start();
-        loadInt(location_windowWidth, Globals.WIDTH);
-        loadInt(location_windowHeight, Globals.HEIGHT);
-        loadMatrix(super.getUniformLocation("projectionMatrix"), Util.createOrthoMatrix());
+        loadMatrix(super.getUniformLocation("projectionMatrix"), Util.createOrthoMatrix(true));
         stop();
     }
 
@@ -33,10 +29,9 @@ public class BasicSpriteShader extends ShaderProgram implements SpriteShader {
     @Override
     protected void getAllUniformLocations() {
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
-        location_windowWidth = super.getUniformLocation("windowWidth");
-        location_windowHeight = super.getUniformLocation("windowHeight");
     }
     
+    @Override
     public void loadTransformationMatrix(Matrix4f matrix) {
         super.loadMatrix(location_transformationMatrix, matrix);
     }

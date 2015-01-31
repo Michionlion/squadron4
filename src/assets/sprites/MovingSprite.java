@@ -62,8 +62,8 @@ public class MovingSprite extends Sprite implements Tickable {
 //        }
 //
 //        System.out.println("translating: " + delta);
-        Vector2f dVec = new Vector2f((float)(Math.cos(Math.toRadians(rotation)) * 0.4f), (float)(Math.sin(Math.toRadians(rotation)) * 0.4f));
-        super.translate(dVec);
+//        Vector2f dVec = new Vector2f((float)(Math.cos(Math.toRadians(rotation)) * 0.4f), (float)(Math.sin(Math.toRadians(rotation)) * 0.4f));
+//        super.translate(dVec);
         super.translate(delta.x, delta.y);
     }
     

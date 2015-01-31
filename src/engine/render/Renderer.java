@@ -2,15 +2,13 @@ package engine.render;
 
 import assets.Loader;
 import assets.models.RawModel;
-import assets.shaders.BloomSpriteShader;
-import assets.shaders.ShaderProgram;
 import assets.shaders.BasicSpriteShader;
+import assets.shaders.ScreenShader;
 import assets.sprites.MovingSprite;
 import assets.sprites.Sprite;
 import engine.Globals;
 import engine.interfaces.Interpolatable;
 import engine.interfaces.RenderObject;
-import engine.interfaces.Shader;
 import engine.interfaces.SpriteShader;
 import engine.util.Util;
 import java.awt.Rectangle;
@@ -27,7 +25,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL30;;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
@@ -39,6 +37,7 @@ public class Renderer implements Runnable {
 
     public static RawModel QUAD;
 
+    public int FBO;
     public RawModel boundModel;
     public Texture boundTexture;
 
@@ -78,14 +77,15 @@ public class Renderer implements Runnable {
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
-
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 
         float[] verts
                 = {0.5f, 0.5f, 0f, //v1
@@ -96,12 +96,28 @@ public class Renderer implements Runnable {
         int[] indices = {0, 1, 3, 3, 1, 2};
 
         QUAD = Loader.loadToVAO(verts, texs, indices);
-
+        
+        //create FBO
+        FBO = GL30.glGenFramebuffers();
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
+        
+        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, Loader.getRenderTextureID(), 0);
+        
+//        int error = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
+//        if(error != GL30.GL_FRAMEBUFFER_COMPLETE) {
+//            System.err.println("ERROR IN FRAME BUFFER, ERROR NUM = " + error);
+//        }
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+        
+        
+        
+        
+        
         //render loop
         BasicSpriteShader s = new BasicSpriteShader();
-        BloomSpriteShader b = new BloomSpriteShader();
-        MovingSprite sprite1 = new MovingSprite(Loader.getTexture("spaceship-off"), new Vector2f(50, 0), 0, new Vector2f(0, 0), new Vector2f(40,40), 1);
-        MovingSprite sprite2 = new MovingSprite(Loader.getTexture("spaceship-off2"), new Vector2f(-50, 0), 0, new Vector2f(0, 0), new Vector2f(40,40), 1);
+        ScreenShader screenShader = new ScreenShader();
+        MovingSprite sprite1 = new MovingSprite(Loader.getTexture("ship"), new Vector2f(0, 0), 0, new Vector2f(0, 0), new Vector2f(128,128), 0);
+//        MovingSprite sprite2 = new MovingSprite(Loader.getTexture("debug"), new Vector2f(-50, 0), 0, new Vector2f(0, 0), new Vector2f(64,64), 1);
 //        Globals.add(sprite);
         while (!Display.isCloseRequested()) {
             now = Globals.getTime();
@@ -113,59 +129,87 @@ public class Renderer implements Runnable {
             } else {
                 interpolation = 1;
             }
+            GL11.glClearColor(0, 0, 1, 1);
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+            
+            GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
             clearRender();
-
             // --SPRITE RENDER--
             prepareSpriteRender();
 //            for (RenderObject toRender : Globals.renderObjects) {
 //                if (toRender.isVisible()) {
 //                    if (toRender instanceof Sprite) {
-//                        renderSprite((Sprite) toRender, b);
+//                        renderSprite((Sprite) toRender, s);
 //                    }
 //                }
 //            }
             if(Keyboard.isKeyDown(Keyboard.KEY_E)) {
-                sprite1.rotate(0.6f);
-                sprite2.rotate(0.6f);
+                sprite1.rotate(0.02f);
             } else if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-                sprite1.rotate(-0.6f);
-                sprite2.rotate(-0.6f);
+                sprite1.rotate(-0.02f);
             }
             
-            renderSprite(sprite2, b);
-            renderSprite(sprite1, b);
+            if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
+                sprite1.translate(0, -0.02f);
+            } else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+                sprite1.translate(0, 0.02f);
+            }
+            if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
+                sprite1.translate(-0.02f, 0);
+            } else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+                sprite1.translate(0.02f, 0);
+            }
             
-            sprite1.tick();
-            sprite2.tick();
+            renderSprite(sprite1, s);
+            
             endSpriteRender();
             // --END SPRITE RENDER--
 
             GL11.glFinish();
             
-            if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-                isInterpolating = true;
-            }
-            if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
-                isInterpolating = false;
-            }
+            GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+            
+            
+            //start and bind quad
+            screenShader.start();
+            GL30.glBindVertexArray(QUAD.getVaoID());
+            GL20.glEnableVertexAttribArray(0);
+            GL20.glEnableVertexAttribArray(1);
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            
+            screenShader.loadTransformationMatrix(Util.createSpriteTransformationMatrix(0, 0, 0, Globals.WIDTH, Globals.HEIGHT, 0));
+            
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, Loader.getRenderTextureID());
+            GL11.glDrawElements(GL11.GL_TRIANGLES, QUAD.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+            
+            //unbind
+            GL20.glDisableVertexAttribArray(0);
+            GL20.glDisableVertexAttribArray(1);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+            GL30.glBindVertexArray(0);
+            
+            screenShader.stop();
+            
+            
             renders++;
-            double renderTime = Globals.getTime() - now;
-//            System.out.println("render " + renders + " done in " + renderTime + "ms.");
-            Display.setTitle("Squadron 4  -  TPS: " + Globals.TICKER.getTPS() + "  -  Sprites: " + Globals.renderObjects.size());
             DisplayManager.updateDisplay();
+            float renderTime = (float) (Globals.getTime() - now);
+            System.out.println("render " + renders + " done in " + renderTime + "ms.  FPS: " + Math.round(1/(renderTime/1_000f)));
+            Display.setTitle("Squadron 4  -  TPS: " + Globals.TICKER.getTPS() + "  -  Sprites: " + Globals.renderObjects.size());
+            
         }
 
         Globals.TICKER.end();
-
+        
         s.cleanUp();
-
+        
         Loader.cleanUp();
-
+        GL30.glDeleteFramebuffers(FBO);
         DisplayManager.closeDisplay();
     }
 
     public void clearRender() {
-        GL11.glClearColor(0, 0, 0, 1);
+        GL11.glClearColor(1f, 0.1f, 0.1f, 0);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
     
@@ -179,6 +223,7 @@ public class Renderer implements Runnable {
     public void endSpriteRender() {
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
         GL30.glBindVertexArray(0);
     }
 
