@@ -1,14 +1,13 @@
 package assets.game.objects;
 
-import assets.ShipManager;
+import assets.Loader;
 import assets.game.objects.Projectile.ProjectileType;
 import engine.GameObject;
 import engine.Globals;
 import org.lwjgl.util.vector.Vector2f;
-import org.newdawn.slick.opengl.Texture;
 
 
-public class Ship extends GameObject {
+public abstract class Ship extends GameObject {
     
     public static final boolean SPEED_LIMIT_ON = true;
     public static final float SPEED_LIMIT = 2.85f;
@@ -46,15 +45,13 @@ public class Ship extends GameObject {
     protected int frames;
     protected String name;
 
-    public Ship(Texture tex, Vector2f pos, float rotation, Vector2f delta, Vector2f size, String name) {
-        super(tex, pos, rotation, delta, size);
+    public Ship(Vector2f pos, float rotation, Vector2f delta, String name) {
+        super(Loader.getTexture("spaceship-off2"), pos, rotation, delta, new Vector2f(55,55));
         this.name = name;
     }
     
     @Override
     public void tick() {
-        
-        
         
         move(delta);
         frames++;

@@ -1,6 +1,8 @@
 package engine.render;
 
 import assets.Loader;
+import assets.game.objects.PlayerShip;
+import assets.game.objects.Ship;
 import assets.models.RawModel;
 import assets.shaders.BasicSpriteShader;
 import assets.shaders.ScreenShader;
@@ -44,7 +46,20 @@ public class Renderer implements Runnable {
     private double now = System.nanoTime();
     Area aaa = null;
     private long renders = 0;
+    private boolean aaOn;
     private boolean isInterpolating = false;
+    
+    BasicSpriteShader spriteShader;
+    ScreenShader screenShader;
+    
+    public Renderer() {
+        aaOn = true;
+    }
+    
+    public Renderer(boolean aa) {
+        aaOn = aa;
+    }
+    
 
     @Override
     public void run() {
@@ -114,11 +129,11 @@ public class Renderer implements Runnable {
         
         
         //render loop
-        BasicSpriteShader s = new BasicSpriteShader();
-        ScreenShader screenShader = new ScreenShader();
-        MovingSprite sprite1 = new MovingSprite(Loader.getTexture("ship"), new Vector2f(0, 0), 0, new Vector2f(0, 0), new Vector2f(128,128), 0);
-//        MovingSprite sprite2 = new MovingSprite(Loader.getTexture("debug"), new Vector2f(-50, 0), 0, new Vector2f(0, 0), new Vector2f(64,64), 1);
-//        Globals.add(sprite);
+        spriteShader = new BasicSpriteShader();
+        screenShader = new ScreenShader(aaOn);
+        
+        PlayerShip ship = new PlayerShip(300, 300, 0);
+        Globals.add(ship);
         while (!Display.isCloseRequested()) {
             now = Globals.getTime();
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -129,38 +144,21 @@ public class Renderer implements Runnable {
             } else {
                 interpolation = 1;
             }
-            GL11.glClearColor(0, 0, 1, 1);
-            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+            clearRender();
             
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
-            clearRender();
+            clearFBO();
             // --SPRITE RENDER--
             prepareSpriteRender();
-//            for (RenderObject toRender : Globals.renderObjects) {
-//                if (toRender.isVisible()) {
-//                    if (toRender instanceof Sprite) {
-//                        renderSprite((Sprite) toRender, s);
-//                    }
-//                }
-//            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_E)) {
-                sprite1.rotate(0.02f);
-            } else if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-                sprite1.rotate(-0.02f);
+            for (RenderObject toRender : Globals.renderObjects) {
+                if (toRender.isVisible()) {
+                    if (toRender instanceof Sprite) {
+                        renderSprite((Sprite) toRender, spriteShader);
+                    }
+                }
             }
             
-            if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
-                sprite1.translate(0, -0.02f);
-            } else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-                sprite1.translate(0, 0.02f);
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
-                sprite1.translate(-0.02f, 0);
-            } else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-                sprite1.translate(0.02f, 0);
-            }
-            
-            renderSprite(sprite1, s);
+            ship.rotate(0.1f);
             
             endSpriteRender();
             // --END SPRITE RENDER--
@@ -194,22 +192,32 @@ public class Renderer implements Runnable {
             renders++;
             DisplayManager.updateDisplay();
             float renderTime = (float) (Globals.getTime() - now);
-            System.out.println("render " + renders + " done in " + renderTime + "ms.  FPS: " + Math.round(1/(renderTime/1_000f)));
+            //System.out.println("render " + renders + " done in " + renderTime + "ms.  FPS: " + Math.round(1/(renderTime/1_000f)));
             Display.setTitle("Squadron 4  -  TPS: " + Globals.TICKER.getTPS() + "  -  Sprites: " + Globals.renderObjects.size());
             
         }
 
         Globals.TICKER.end();
         
-        s.cleanUp();
+        spriteShader.cleanUp();
         
         Loader.cleanUp();
         GL30.glDeleteFramebuffers(FBO);
         DisplayManager.closeDisplay();
     }
+    
+    public void setAA(boolean aaOn) {
+        this.aaOn = aaOn;
+        
+    }
 
     public void clearRender() {
-        GL11.glClearColor(1f, 0.1f, 0.1f, 0);
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 1);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+    }
+    
+    public void clearFBO() {
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
     
@@ -246,7 +254,9 @@ public class Renderer implements Runnable {
     
     
     
-    
+    private Vector2f vec2(float x, float y) {
+        return new Vector2f(x,y);
+    }
 
     public Area createAreaFromImage(String fileName, byte cutoff) {
 

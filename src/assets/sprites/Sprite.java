@@ -7,7 +7,7 @@ import org.lwjgl.util.Point;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
-public class Sprite implements RenderObject {
+public abstract class Sprite implements RenderObject {
     
     protected Texture tex;
     protected Vector2f pos;
@@ -46,6 +46,7 @@ public class Sprite implements RenderObject {
         Vector2f.add(pos, t, pos);
     }
 
+    @Override
     public Texture getTex() {
         return tex;
     }
@@ -107,6 +108,6 @@ public class Sprite implements RenderObject {
 
     @Override
     public boolean isVisible() {
-        return Globals.viewArea.contains(new Point(Util.r(pos.x), Util.r(pos.y)));
+        return true;
     }
 }

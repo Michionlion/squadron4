@@ -6,7 +6,6 @@ import engine.render.Renderer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.Rectangle;
 
@@ -18,14 +17,14 @@ public class Globals {
     public static final int FPS_CAP = 240;
 
     public static Ticker TICKER = new Ticker(30);
-    public static Renderer RENDERER = new Renderer();
+    public static Renderer RENDERER = new Renderer(true);
     public static Client CLIENT;
     
     
     public static CopyOnWriteArrayList<GameObject> gameObjects;
     public static CopyOnWriteArrayList<RenderObject> renderObjects;
     
-    public static Rectangle viewArea = new Rectangle(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    public static Rectangle viewArea = new Rectangle(0, 0, WIDTH, HEIGHT);
     
     
     
@@ -48,7 +47,7 @@ public class Globals {
     
     
     public static String getUserName() {
-        return "NO_USERNAME_SUPPORT";
+        return "NO_USERNAME_SUPPORT_YET";
     }
     
     public static boolean isMulti() {

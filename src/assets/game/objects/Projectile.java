@@ -9,7 +9,7 @@ import org.newdawn.slick.opengl.Texture;
 
 
 public class Projectile extends GameObject {
-    
+
     public static enum ProjectileType {
         
         // projectile defs
@@ -106,5 +106,10 @@ public class Projectile extends GameObject {
     @Override
     public String toString() {
         return "Projectile at: " + pos.x + ", " + pos.y + ", of type: " + type.name() + ", which has lasted for " + frames + " frames!" + "  is it visible (super): " + super.isVisible();
+    }
+    
+    @Override
+    public boolean interpolate() {
+        return true;
     }
 }
