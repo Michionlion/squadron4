@@ -3,6 +3,7 @@ package engine;
 import engine.interfaces.RenderObject;
 import engine.interfaces.Tickable;
 import engine.render.Renderer;
+import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,7 +88,7 @@ public class Globals {
     }
 
     public static void main(String[] args) {
-//        System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
+        System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
 //        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
         
         

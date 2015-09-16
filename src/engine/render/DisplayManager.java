@@ -19,7 +19,7 @@ public class DisplayManager {
         
         try {
             Display.setDisplayMode(new DisplayMode(Globals.WIDTH, Globals.HEIGHT));
-            Display.create(new PixelFormat(), new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true));
+            Display.create();
             Display.setTitle("Squadron 4");
         } catch (LWJGLException ex) {
             Logger.getLogger(Globals.class.getName()).log(Level.SEVERE, null, ex);
