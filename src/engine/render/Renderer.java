@@ -53,7 +53,7 @@ public class Renderer implements Runnable {
     ScreenShader screenShader;
     
     public Renderer() {
-        aaOn = true;
+        aaOn = false;
     }
     
     public Renderer(boolean aa) {
@@ -158,7 +158,7 @@ public class Renderer implements Runnable {
                 }
             }
             
-            ship.rotate(0.1f);
+            ship.rotate(0.5f);
             
             endSpriteRender();
             // --END SPRITE RENDER--
