@@ -21,7 +21,6 @@ void main() {
         return;
     }
 
-
     if(isEdge()) outColor = blur(); //this line gets correct edge on linux
     else outColor = color;
     
@@ -81,12 +80,12 @@ vec4 blur() {
     
     int i,j;
     int samples;
-    int dis = 2;
+    int dis = 1;
     vec4 sum = vec4(0,0,0,0);
     vec4 toAdd;
     for(i=-dis; i<=dis; i++) {
         for(j=-dis; j<=dis; j++) {
-            vec2 offset = vec2(i, j)*size;
+            vec2 offset = vec2(i, j)*size/1f;
             toAdd = texture(textureSampler, pass_textureCoords + offset);
             sum += toAdd;
             samples++;

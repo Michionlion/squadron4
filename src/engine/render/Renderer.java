@@ -158,7 +158,7 @@ public class Renderer implements Runnable {
                 }
             }
             
-            ship.rotate(0.5f);
+            //ship.rotate(0.5f);
             
             endSpriteRender();
             // --END SPRITE RENDER--
