@@ -29,13 +29,13 @@ public final class PlayerShip extends Ship {
             energy = ENERGY_AMOUNT;
         }
 
-        double b = Math.toDegrees(Math.atan2(Mouse.getY() - (pos.y - Globals.viewArea.getY()), Mouse.getX() - (pos.x - Globals.viewArea.getX())));
+        double b = Math.toDegrees(Math.atan2(Mouse.getX() - (pos.x - Globals.viewArea.getX()), (Globals.HEIGHT-Mouse.getY()) - (pos.y - Globals.viewArea.getY())));
         double a = rotation;
         if (b < 0) {
             b += 360;
         }
 
-        if (Mouse.isButtonDown(2)) {
+        if (Mouse.isButtonDown(1)) {
             boolean clockwise = true;
             if (a < b && b - a > 180) {
                 clockwise = false;
@@ -164,7 +164,7 @@ public final class PlayerShip extends Ship {
         if (accelerating) {
             double r = Math.toRadians(rotation);
             Vector2f accel;
-            accel = new Vector2f((float) (Math.cos(r) * THRUST), (float) (Math.sin(r) * THRUST));
+            accel = new Vector2f((float) (Math.sin(r) * THRUST), (float) (Math.cos(r) * THRUST));
             Vector2f.add(delta, accel, delta);
         }
         //calculate if warping or slowing down

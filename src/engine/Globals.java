@@ -18,7 +18,7 @@ public class Globals {
     public static final int FPS_CAP = 240;
 
     public static Ticker TICKER = new Ticker(30);
-    public static Renderer RENDERER = new Renderer(true);
+    public static Renderer RENDERER = new Renderer();
     public static Client CLIENT;
     
     

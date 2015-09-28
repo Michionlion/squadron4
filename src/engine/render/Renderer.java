@@ -54,6 +54,7 @@ public class Renderer implements Runnable {
     
     public Renderer() {
         aaOn = false;
+        if(0 <= System.getProperty("os.name").toLowerCase().indexOf("win")) aaOn = true;
     }
     
     public Renderer(boolean aa) {

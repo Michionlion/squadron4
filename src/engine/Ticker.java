@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.lwjgl.input.Mouse;
 
 public class Ticker implements Runnable {
 
@@ -43,6 +44,7 @@ public class Ticker implements Runnable {
 
     public void logic() {
         long time = System.currentTimeMillis();
+        System.out.println("MOUSE: Vec2[" + Mouse.getX() + ", " + (Globals.HEIGHT-Mouse.getY()) + "]");
         if (!entities.isEmpty()) {
             for (Tickable e : entities) {
                 e.tick();
