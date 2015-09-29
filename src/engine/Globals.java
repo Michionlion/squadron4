@@ -13,7 +13,14 @@ import org.lwjgl.util.Rectangle;
 public class Globals {
     
     public static String OS;
-
+    
+    static { // get OS before anything else
+        System.out.print("Running on " + System.getProperty("os.name"));
+        if(System.getProperty("os.name").toLowerCase().contains("windows")) OS = "WINDOWS";
+        else if(System.getProperty("os.name").toLowerCase().contains("nux")) OS = "LINUX";
+        else if(System.getProperty("os.name").toLowerCase().contains("mac")) OS = "MAC";
+        System.out.println(", setting OS to " + OS);
+    }
     public static final int WIDTH = 1080;
     public static final int HEIGHT = 720;
     
@@ -92,9 +99,6 @@ public class Globals {
     public static void main(String[] args) {
         System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
         
-        if(0 <= System.getProperty("os.name").toLowerCase().indexOf("win")) OS = "WINDOWS";
-        else if(0 <= System.getProperty("os.name").toLowerCase().indexOf("nux")) OS = "LINUX";
-        else if(0 <= System.getProperty("os.name").toLowerCase().indexOf("mac")) OS = "MAC";
                 
 //        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
         

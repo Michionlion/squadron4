@@ -54,7 +54,10 @@ public class Renderer implements Runnable {
     
     public Renderer() {
         aaOn = false;
-        if("WINDOWS".equals(Globals.OS)) aaOn = true;
+        if(Globals.OS.equals("WINDOWS")) {
+            System.out.println("OS is Windows, defaulting aa to on!");
+            aaOn = true;
+        }
     }
     
     public Renderer(boolean aa) {

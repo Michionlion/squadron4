@@ -10,7 +10,7 @@ import org.lwjgl.util.vector.Vector2f;
 public abstract class Ship extends GameObject {
     
     public static final boolean SPEED_LIMIT_ON = true;
-    public static final float SPEED_LIMIT = 5.85f;
+    public static final float SPEED_LIMIT = 3.85f;
     public static final float WARP_SPEED_LIMIT = 132.5f;
     public static final float THRUST_TURN_MOD = 0.95f;
     public static final float THRUST_SLOW_MOD = 0.12f;

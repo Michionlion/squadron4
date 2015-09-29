@@ -32,29 +32,33 @@ public final class PlayerShip extends Ship {
             energy = ENERGY_AMOUNT;
         }
 
-        double b = Math.toDegrees(Math.atan2(Mouse.getX() - (pos.x - Globals.viewArea.getX()), (Globals.HEIGHT-Mouse.getY()) - (pos.y - Globals.viewArea.getY())));
-        double a = rotation;
-        if (b < 0) {
-            b += 360;
+        double desiredRot = Math.toDegrees(Math.atan2(Mouse.getX() - (pos.x - Globals.viewArea.getX()), (Globals.HEIGHT-Mouse.getY()) - (pos.y - Globals.viewArea.getY())));
+        if (Math.abs(desiredRot - rotation) > TURN_RATE / 2f) {
+            
+            double currentRot = rotation;
+            
+            if (desiredRot < 0) {
+                desiredRot += 360;
+            }
+
+            if (Mouse.isButtonDown(TURN_MBUTTON)) {
+                boolean clockwise = true;
+                if (currentRot < desiredRot && desiredRot - currentRot > 180) {
+                    clockwise = false;
+                }
+                if (currentRot > desiredRot && currentRot - desiredRot <= 180) {
+                    clockwise = false;
+                }
+
+                if (clockwise) {
+                    rotate(TURN_RATE);
+                } else {
+                    rotate(-TURN_RATE);
+                }
+
+            }
         }
-
-        if (Mouse.isButtonDown(1)) {
-            boolean clockwise = true;
-            if (a < b && b - a > 180) {
-                clockwise = false;
-            }
-            if (a > b && a - b <= 180) {
-                clockwise = false;
-            }
-
-            if (clockwise) {
-                rotate(TURN_RATE);
-            } else {
-                rotate(-TURN_RATE);
-            }
-
-        }
-        if (Mouse.isButtonDown(0) || Keyboard.isKeyDown(Keyboard.KEY_W)) {
+        if (Mouse.isButtonDown(ACCEL_MBUTTON) || Keyboard.isKeyDown(Keyboard.KEY_W)) {
             if (useEnergy(0.23f)) {
                 accelerating = true;
             }
