@@ -92,7 +92,7 @@ vec4 blur() {
         }
     }
 
-    return (sum/samples) + color/3.45f;
+    return (sum/samples) + color/4.2f;
 }
 
 /** glsl fxaa shader main code: http://horde3d.org/wiki/index.php5?title=Shading_Technique_-_FXAA

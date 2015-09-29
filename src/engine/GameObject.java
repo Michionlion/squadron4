@@ -22,7 +22,7 @@ public abstract class GameObject extends MovingSprite {
     public void move(float angle, float distance) {
         
         double radians = Math.toRadians(angle);
-        Vector2f dVec = new Vector2f((float)(Math.cos(radians) * distance), (float)(Math.sin(radians) * distance));
+        Vector2f dVec = new Vector2f((float)(Math.sin(radians) * distance), (float)(Math.cos(radians) * distance));
         Vector2f.add(pos, dVec, pos);
     }
     

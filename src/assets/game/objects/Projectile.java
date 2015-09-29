@@ -13,8 +13,8 @@ public class Projectile extends GameObject {
     public static enum ProjectileType {
         
         // projectile defs
-        LASER(Loader.getTexture("laser"), 12.54f, 800, 1),
-        MISSILE(Loader.getTexture("missile"), 185.67f, 375, 2);
+        LASER(Loader.getTexture("laser"), 12.54f, 20, 1),
+        MISSILE(Loader.getTexture("missile"), 185.67f, 5, 2);
         
         Texture tex;
         float damage;

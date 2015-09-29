@@ -10,7 +10,7 @@ import org.lwjgl.util.vector.Vector2f;
 public abstract class Ship extends GameObject {
     
     public static final boolean SPEED_LIMIT_ON = true;
-    public static final float SPEED_LIMIT = 2.85f;
+    public static final float SPEED_LIMIT = 5.85f;
     public static final float WARP_SPEED_LIMIT = 132.5f;
     public static final float THRUST_TURN_MOD = 0.95f;
     public static final float THRUST_SLOW_MOD = 0.12f;
@@ -112,18 +112,18 @@ public abstract class Ship extends GameObject {
         if (type == ProjectileType.LASER) {
             //play sound - laser1
             spawnRot = (float) (rotation + (Math.random() * 2 - 1));
-            spawnX = (float) (pos.x + Math.cos(radians) * 19 + 1);
-            spawnY = (float) (pos.y + Math.sin(radians) * 19 + 1);
+            spawnX = (float) (pos.x + Math.sin(radians) * 19 + 1);
+            spawnY = (float) (pos.y + Math.cos(radians) * 19 + 1);
         } else if (type == ProjectileType.MISSILE) {
             //play sound - missile1
             missileMag--;
             spawnRot = rotation;
-            spawnX = (float) (pos.x + Math.cos(radians) * 12);
-            spawnY = (float) (pos.y + Math.sin(radians) * 12);
+            spawnX = (float) (pos.x + Math.sin(radians) * 12);
+            spawnY = (float) (pos.y + Math.cos(radians) * 12);
         } else {
             spawnRot = rotation;
-            spawnX = (float) (pos.x + Math.cos(radians) * 12);
-            spawnY = (float) (pos.y + Math.sin(radians) * 12);
+            spawnX = (float) (pos.x + Math.sin(radians) * 12);
+            spawnY = (float) (pos.y + Math.cos(radians) * 12);
         }
 
         //log("creating projectile at: " + x + ", " + y + "  rotation: " + rotation + ", type: " + type);

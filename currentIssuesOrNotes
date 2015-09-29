@@ -1,0 +1,2 @@
+projectiles spawn in wrong place (slightly left)
+projectiles 'stick' to PlayerShip, almost as if matrix is persisting?  They move when the ship moves

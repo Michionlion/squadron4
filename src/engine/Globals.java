@@ -11,13 +11,15 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.Rectangle;
 
 public class Globals {
+    
+    public static String OS;
 
     public static final int WIDTH = 1080;
     public static final int HEIGHT = 720;
     
     public static final int FPS_CAP = 240;
 
-    public static Ticker TICKER = new Ticker(30);
+    public static Ticker TICKER = new Ticker(60);
     public static Renderer RENDERER = new Renderer(true);
     public static Client CLIENT;
     
@@ -89,6 +91,11 @@ public class Globals {
 
     public static void main(String[] args) {
         System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
+        
+        if(0 <= System.getProperty("os.name").toLowerCase().indexOf("win")) OS = "WINDOWS";
+        else if(0 <= System.getProperty("os.name").toLowerCase().indexOf("nux")) OS = "LINUX";
+        else if(0 <= System.getProperty("os.name").toLowerCase().indexOf("mac")) OS = "MAC";
+                
 //        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
         
         

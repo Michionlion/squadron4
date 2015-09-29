@@ -108,6 +108,9 @@ public abstract class Sprite implements RenderObject {
 
     @Override
     public boolean isVisible() {
-        return true;
+        boolean i = Globals.viewArea.contains(Math.round(pos.x), Math.round(pos.y));
+        boolean f = Globals.viewArea.contains(Math.round(pos.x+width), Math.round(pos.y+height));
+        boolean e = Globals.viewArea.contains(Math.round(pos.x-width), Math.round(pos.y-height));
+        return i||f||e;
     }
 }

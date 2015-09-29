@@ -10,9 +10,12 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
 
 public final class PlayerShip extends Ship {
+    
+    public static int TURN_MBUTTON = 1;
+    public static int ACCEL_MBUTTON = 0;
 
-    private float THRUST = 0.06f;
-    private float TURN_RATE = 2.425f;
+    private float THRUST = 0.18f;
+    private float TURN_RATE = 3.425f;
 
     public PlayerShip(float x, float y, float rot) {
         super(new Vector2f(x, y), rot, new Vector2f(0, 0), Globals.getUserName());
@@ -29,29 +32,33 @@ public final class PlayerShip extends Ship {
             energy = ENERGY_AMOUNT;
         }
 
-        double b = Math.toDegrees(Math.atan2(Mouse.getY() - (pos.y - Globals.viewArea.getY()), Mouse.getX() - (pos.x - Globals.viewArea.getX())));
-        double a = rotation;
-        if (b < 0) {
-            b += 360;
+        double desiredRot = Math.toDegrees(Math.atan2(Mouse.getX() - (pos.x - Globals.viewArea.getX()), (Globals.HEIGHT-Mouse.getY()) - (pos.y - Globals.viewArea.getY())));
+        
+        if (Math.abs(desiredRot-rotation) > TURN_RATE/2f) {
+            double currentRot = rotation;
+            
+            if (desiredRot < 0) {
+                desiredRot += 360;
+            }
+
+            if (Mouse.isButtonDown(TURN_MBUTTON)) {
+                boolean clockwise = true;
+                if (currentRot < desiredRot && desiredRot - currentRot > 180) {
+                    clockwise = false;
+                }
+                if (currentRot > desiredRot && currentRot - desiredRot <= 180) {
+                    clockwise = false;
+                }
+
+                if (clockwise) {
+                    rotate(TURN_RATE);
+                } else {
+                    rotate(-TURN_RATE);
+                }
+
+            }
         }
-
-        if (Mouse.isButtonDown(2)) {
-            boolean clockwise = true;
-            if (a < b && b - a > 180) {
-                clockwise = false;
-            }
-            if (a > b && a - b <= 180) {
-                clockwise = false;
-            }
-
-            if (clockwise) {
-                rotate(TURN_RATE);
-            } else {
-                rotate(-TURN_RATE);
-            }
-
-        }
-        if (Mouse.isButtonDown(0) || Keyboard.isKeyDown(Keyboard.KEY_W)) {
+        if (Mouse.isButtonDown(ACCEL_MBUTTON) || Keyboard.isKeyDown(Keyboard.KEY_W)) {
             if (useEnergy(0.23f)) {
                 accelerating = true;
             }
@@ -164,7 +171,7 @@ public final class PlayerShip extends Ship {
         if (accelerating) {
             double r = Math.toRadians(rotation);
             Vector2f accel;
-            accel = new Vector2f((float) (Math.cos(r) * THRUST), (float) (Math.sin(r) * THRUST));
+            accel = new Vector2f((float) (Math.sin(r) * THRUST), (float) (Math.cos(r) * THRUST));
             Vector2f.add(delta, accel, delta);
         }
         //calculate if warping or slowing down
