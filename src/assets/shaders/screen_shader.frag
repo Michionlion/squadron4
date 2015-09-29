@@ -21,7 +21,7 @@ void main() {
         return;
     }
 
-    if(isEdge()) outColor = blur(); //this line gets correct edge on linux
+    if(isEdge()) outColor = blur(); //this line gets correct edge on linux and windows
     else outColor = color;
     
 }
