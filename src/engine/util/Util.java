@@ -155,6 +155,10 @@ public class Util {
         vec.scale(scale);
         return vec;
     }
+    
+    public static Vector2f copy(Vector2f v) {
+        return new Vector2f(v.x, v.y);
+    }
 
     public static int r(double num) {
         return (int) Math.round(num);

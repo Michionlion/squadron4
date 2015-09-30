@@ -64,6 +64,10 @@ public class Globals {
         return false;
     }
     
+    public void log(Object s) {
+        System.out.println(s);
+    }
+    
     /**
      * Get the time in milliseconds
      *
