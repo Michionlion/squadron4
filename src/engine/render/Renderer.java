@@ -2,6 +2,7 @@ package engine.render;
 
 import assets.Loader;
 import assets.game.objects.PlayerShip;
+import assets.game.objects.Projectile;
 import assets.game.objects.Ship;
 import assets.models.RawModel;
 import assets.shaders.BasicSpriteShader;
@@ -136,6 +137,7 @@ public class Renderer implements Runnable {
         spriteShader = new BasicSpriteShader();
         screenShader = new ScreenShader(aaOn);
         
+        
         PlayerShip ship = new PlayerShip(300, 300, 0);
         Globals.add(ship);
         while (!Display.isCloseRequested()) {
@@ -163,7 +165,6 @@ public class Renderer implements Runnable {
             }
             
             //ship.rotate(0.5f);
-            
             endSpriteRender();
             // --END SPRITE RENDER--
 

@@ -7,8 +7,10 @@ import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.Rectangle;
+import org.lwjgl.util.vector.Vector2f;
 
 public class Globals {
     
@@ -56,8 +58,12 @@ public class Globals {
     }
     
     
-    public static String getUserName() {
+    public static String userName() {
         return "NO_USERNAME_SUPPORT_YET";
+    }
+    
+    public static Vector2f mousePos() {
+        return new Vector2f(Mouse.getX(), HEIGHT-Mouse.getY());
     }
     
     public static boolean isMulti() {

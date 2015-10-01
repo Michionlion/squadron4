@@ -112,8 +112,8 @@ public abstract class Ship extends GameObject {
         if (type == ProjectileType.LASER) {
             //play sound - laser1
             spawnRot = (float) (rotation + (Math.random() * 2 - 1));
-            spawnX = (float) (pos.x + Math.sin(radians) * 19 + 1);
-            spawnY = (float) (pos.y + Math.cos(radians) * 19 + 1);
+            spawnX = (float) (pos.x + Math.sin(radians) * 19);
+            spawnY = (float) (pos.y + Math.cos(radians) * 19);
         } else if (type == ProjectileType.MISSILE) {
             //play sound - missile1
             missileMag--;

@@ -36,7 +36,7 @@ public class Client implements Runnable {
     public void run() {
         try {
 
-            send(Globals.getUserName());
+            send(Globals.userName());
             String input;
             while (in.hasNextLine()) {
                 input = in.nextLine();
@@ -79,7 +79,7 @@ public class Client implements Runnable {
         try {
             Vector2f pos = new Vector2f(Float.parseFloat(info[1]), Float.parseFloat(info[2]));
             float rot = Float.parseFloat(info[3]);
-            if (name.equals(Globals.getUserName())) {
+            if (name.equals(Globals.userName())) {
                 return;
             }
             if (ShipManager.getShip(name) == null) {
@@ -136,7 +136,7 @@ public class Client implements Runnable {
         }
         String name = info[0];
         boolean accel = Boolean.parseBoolean(info[1]);
-        if (name.equals(Globals.getUserName())) {
+        if (name.equals(Globals.userName())) {
             return;
         }
         if (ShipManager.getShip(name) == null) {
@@ -154,7 +154,7 @@ public class Client implements Runnable {
         String name = info[0];
         try {
             float armor = Float.parseFloat(info[1]), shields = Float.parseFloat(info[2]);
-            if (name.equals(Globals.getUserName())) {
+            if (name.equals(Globals.userName())) {
                 return;
             }
             if (ShipManager.getShip(name) == null) {

@@ -1,4 +1,3 @@
 projectiles spawn in wrong place (slightly left)
 
 Vector2f transfers as pointer, not copy.  MUST MANUALLY MAKE COPY USING Util.copy(Vector2f v) if passing as argument unless you want the original to be modified and use the changes made to it
-
