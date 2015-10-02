@@ -26,7 +26,7 @@ public class Globals {
     public static final int WIDTH = 1080;
     public static final int HEIGHT = 720;
     
-    public static final int FPS_CAP = 240;
+    public static final int FPS_CAP = 60;
 
     public static Ticker TICKER = new Ticker(30);
     public static Renderer RENDERER = new Renderer();
