@@ -1,5 +1,6 @@
 package engine;
 
+import assets.sprites.WorldObject;
 import engine.interfaces.RenderObject;
 import engine.interfaces.Tickable;
 import engine.render.Renderer;
@@ -29,11 +30,11 @@ public class Globals {
     public static final int FPS_CAP = 60;
 
     public static Ticker TICKER = new Ticker(30);
-    public static Renderer RENDERER = new Renderer();
+    public static Renderer RENDERER = new Renderer(); //force AA by putting true in as arg
     public static Client CLIENT;
     
     
-    public static CopyOnWriteArrayList<GameObject> gameObjects;
+    public static CopyOnWriteArrayList<WorldObject> worldObjects;
     public static CopyOnWriteArrayList<RenderObject> renderObjects;
     
     public static Rectangle viewArea = new Rectangle(0, 0, WIDTH, HEIGHT);
@@ -47,13 +48,13 @@ public class Globals {
     
     public static void add(Object o) {
         if(o instanceof Tickable) TICKER.add((Tickable) o);
-        if(o instanceof GameObject) gameObjects.add((GameObject) o);
+        if(o instanceof WorldObject) worldObjects.add((WorldObject) o);
         if(o instanceof RenderObject) renderObjects.add((RenderObject) o);
     }
     
     public static void remove(Object o) {
         if(o instanceof Tickable) if(TICKER.isTicking((Tickable) o)) TICKER.remove((Tickable) o);
-        if(o instanceof GameObject) if(gameObjects.contains((GameObject)o)) gameObjects.remove((GameObject) o);
+        if(o instanceof GameObject) if(worldObjects.contains((GameObject)o)) worldObjects.remove((GameObject) o);
         if(o instanceof RenderObject) if(renderObjects.contains((RenderObject)o)) renderObjects.remove((RenderObject) o);
     }
     
@@ -84,7 +85,7 @@ public class Globals {
     }
     
     protected static void initArrays() {
-        gameObjects = new CopyOnWriteArrayList<>();
+        worldObjects = new CopyOnWriteArrayList<>();
         renderObjects = new CopyOnWriteArrayList<>();
     }
     

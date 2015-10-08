@@ -6,8 +6,12 @@ import engine.GameObject;
 import engine.Globals;
 import engine.util.*;
 import org.lwjgl.util.vector.Vector2f;
+import org.newdawn.slick.opengl.Texture;
 
 public abstract class Ship extends GameObject {
+    
+    public static final Texture ON_TEX = Loader.getTexture("spaceship-on");
+    public static final Texture OFF_TEX = Loader.getTexture("spaceship-off");
     
     public static final boolean SPEED_LIMIT_ON = true;
     public static final float SPEED_LIMIT = 3.85f;
@@ -23,6 +27,7 @@ public abstract class Ship extends GameObject {
     public static final int MISSILE_DELAY = 88;
     public static final int LASER_DELAY = 7;
     public static final int TURBO_LASER_DELAY = 1;
+    public static final int TURBO_MISSILE_DELAY = 18;
     public static final int SHIELD_RECHARGE_DELAY = 35;
     public static final int SHIELD_OVERCHARGE_DELAY = 80;
     
@@ -46,7 +51,7 @@ public abstract class Ship extends GameObject {
     protected String name;
 
     public Ship(Vector2f pos, float rotation, Vector2f delta, String name) {
-        super(Loader.getTexture("spaceship-off2"), pos, rotation, delta, new Vector2f(55,55));
+        super(OFF_TEX, pos, rotation, delta, new Vector2f(64,64));
         this.name = name;
     }
     
@@ -179,11 +184,13 @@ public abstract class Ship extends GameObject {
         return shields;
     }
     
-    public void setAccel(boolean accel) {
+    public void setAccelerating(boolean accel) {
         accelerating = accel;
+        if(accelerating) setTex(ON_TEX);
+        else setTex(OFF_TEX);
     }
     
-    public boolean getAccel() {
+    public boolean isAccelerating() {
         return accelerating;
     }
     

@@ -60,18 +60,18 @@ public final class PlayerShip extends Ship {
         }
         if (Mouse.isButtonDown(ACCEL_MBUTTON) || Keyboard.isKeyDown(Keyboard.KEY_W)) {
             if (useEnergy(0.23f)) {
-                accelerating = true;
+                setAccelerating(true);
             }
         } else {
-            accelerating = false;
+            setAccelerating(false);
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && accelerating) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && isAccelerating()) {
             if (useEnergy(0.13f)) {
                 THRUST *= THRUST_BOOST_MOD;
             } else {
                 //play sound - energy fail
             }
-        } else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && accelerating) {
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && isAccelerating()) {
             if (useEnergy(0.14f)) {
                 THRUST *= THRUST_SLOW_MOD;
             } else {
@@ -84,7 +84,8 @@ public final class PlayerShip extends Ship {
         calculateShieldRecharge();
 
         if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
-            energy += 5;
+            energy += 25;
+            missileMag = 50;
         }
 
         //weapons
@@ -95,9 +96,10 @@ public final class PlayerShip extends Ship {
             ammoType = ProjectileType.MISSILE;
             turbo = false;
         } else if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
-            //turbo lasers
-            ammoType = ProjectileType.LASER;
+            //turbo lasers or missiles
             turbo = true;
+            laserCount = TURBO_LASER_DELAY;
+            missileCount = TURBO_MISSILE_DELAY;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
             firing = true;
@@ -116,7 +118,12 @@ public final class PlayerShip extends Ship {
                     //play sound - energy fail
                 }
             } else if (ammoType == ProjectileType.MISSILE && missileCount <= 0 && missileMag > 0) {
-                if (useEnergy(0.16f)) {
+                if(turbo) {
+                    if(useEnergy(20f)) {
+                        missileCount = TURBO_MISSILE_DELAY;
+                        fire(ProjectileType.MISSILE);
+                    }
+                } else if (useEnergy(0.16f)) {
                     missileCount = MISSILE_DELAY;
                     fire(ProjectileType.MISSILE);
                 } else {
@@ -140,11 +147,11 @@ public final class PlayerShip extends Ship {
         System.out.println("POSITION: " + pos + ", ROTATION: " + rotation);
 
 //        System.out.println(Game.isFastTicking(this));
-//        if(accelerating) Game.add(new EngineParticle(x - Math.cos(Math.toRadians(rotation)) * 6.5, y - Math.sin(Math.toRadians(rotation)) * 6.5, -Math.cos(Math.toRadians(rotation))*1.5, -Math.sin(Math.toRadians(rotation))*1.5, new Color(200, 200, 200, 145)));
+//        if(isAccelerating) Game.add(new EngineParticle(x - Math.cos(Math.toRadians(rotation)) * 6.5, y - Math.sin(Math.toRadians(rotation)) * 6.5, -Math.cos(Math.toRadians(rotation))*1.5, -Math.sin(Math.toRadians(rotation))*1.5, new Color(200, 200, 200, 145)));
 //        else Game.add(new EngineParticle(x - Math.cos(Math.toRadians(rotation)) * 12, y - Math.sin(Math.toRadians(rotation)) * 12, Color.DARK_GRAY));
         if (frames % 3 == 0) {
             if (Globals.isMulti()) {
-                Globals.CLIENT.sendAccel(accelerating);
+                Globals.CLIENT.sendAccel(isAccelerating());
             }
         }
     }
@@ -168,7 +175,7 @@ public final class PlayerShip extends Ship {
 
         float deltaLength = (float) Math.sqrt(delta.lengthSquared());
 
-        if (accelerating) {
+        if (isAccelerating()) {
             double r = Math.toRadians(rotation);
             Vector2f accel;
             accel = new Vector2f((float) (Math.sin(r) * THRUST), (float) (Math.cos(r) * THRUST));
@@ -190,7 +197,7 @@ public final class PlayerShip extends Ship {
             Util.setMagnitudeOfVector2f(delta, speedLimit);
         }
 
-        if (movementInhibitor && !accelerating && !slowDown && useEnergy(0.08f) && !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && deltaLength >= 0.016f) {
+        if (movementInhibitor && !isAccelerating() && !slowDown && useEnergy(0.08f) && !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && deltaLength >= 0.016f) {
             if (deltaLength >= 1) {
                 delta.scale(0.965f);
             } else if (deltaLength <= 0.2) {
@@ -209,10 +216,6 @@ public final class PlayerShip extends Ship {
         if (Globals.isMulti()) {
             Globals.CLIENT.sendPos(getX(), getY(), getRotation());
         }
-    }
-
-    public boolean isAccelerating() {
-        return accelerating;
     }
 
     @Override

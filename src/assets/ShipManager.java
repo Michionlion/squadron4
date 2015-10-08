@@ -43,7 +43,7 @@ public class ShipManager {
     
     public static void updateShip(String name, boolean accel) {
         Ship s = getShip(name);
-        s.setAccel(accel);
+        s.setAccelerating(accel);
     }
     
     public static Ship getShip(String name) {

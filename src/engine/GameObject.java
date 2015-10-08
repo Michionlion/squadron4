@@ -1,10 +1,10 @@
 package engine;
 
-import assets.sprites.MovingSprite;
+import assets.sprites.WorldObject;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
-public abstract class GameObject extends MovingSprite {
+public abstract class GameObject extends WorldObject {
 
     public GameObject(Texture tex, Vector2f pos, float rotation, Vector2f delta, Vector2f size) {
         super(tex, pos, rotation, delta, size, 1);
