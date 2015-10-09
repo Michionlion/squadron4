@@ -142,7 +142,7 @@ public class Renderer implements Runnable {
         PlayerShip ship = new PlayerShip(300, 300, 0);
         Globals.add(ship);
         
-        ParticleSystem p = new ParticleSystem(500, 500, 0, new Vector2f(0,0), 2, 1, 20);
+        ParticleSystem p = new ParticleSystem(500, 500, 0, new Vector2f(0,0), 2, 2, 3);
         Globals.add(p);
         
         while (!Display.isCloseRequested()) {

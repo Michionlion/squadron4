@@ -74,9 +74,14 @@ public class Loader {
         Texture tex = null;
         
         try {
-            System.out.println("loaded " + fileName);
-            tex = TextureLoader.getTexture("PNG", new FileInputStream("res/art/"+fileName+".png"));
+            System.out.println("Starting load " + fileName);
+            
+            FileInputStream in = new FileInputStream("res/art/"+fileName+".png");
+            tex = TextureLoader.getTexture("PNG", in);
+            
+            System.out.println("Loaded " + fileName);
         } catch (IOException ex) {
+            System.err.println("Failed to load " + fileName);
             Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
         }
         if(tex == null) {
