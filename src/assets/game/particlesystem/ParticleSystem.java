@@ -20,6 +20,7 @@ public class ParticleSystem extends GameObject {
 
     public ParticleSystem(float x, float y, float rotation, Vector2f delta, float emitSpeed, int emitDelay, int emitAmount) {
         super(Loader.getTexture("close"), new Vector2f(x,y), rotation, delta, new Vector2f(16,16));
+        SmokeParticle.init();
         this.emitSpeed = emitSpeed;
         this.emitDelay = emitDelay;
         this.emitAmount = emitAmount;

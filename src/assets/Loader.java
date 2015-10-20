@@ -4,6 +4,7 @@ import assets.models.RawModel;
 import engine.Globals;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class Loader {
     
@@ -76,7 +78,7 @@ public class Loader {
         try {
             System.out.println("Starting load " + fileName);
             
-            FileInputStream in = new FileInputStream("res/art/"+fileName+".png");
+            InputStream in = ResourceLoader.getResourceAsStream("res/art/"+fileName+".png");
             tex = TextureLoader.getTexture("PNG", in);
             
             System.out.println("Loaded " + fileName);
