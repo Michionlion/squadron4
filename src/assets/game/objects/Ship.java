@@ -135,7 +135,7 @@ public abstract class Ship extends GameObject {
         if (Globals.isMulti()) {
             Globals.CLIENT.sendProj(spawnX, spawnY, delta.x, delta.y, spawnRot, type.getID());
         } else {
-            //Globals.add(new Projectile(new Vector2f(spawnX,spawnY), Util.copy(delta), spawnRot, type));
+            Globals.add(new Projectile(new Vector2f(spawnX,spawnY), Util.copy(delta), spawnRot, type));
         }
     }
     

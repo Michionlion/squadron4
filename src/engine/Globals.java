@@ -84,6 +84,7 @@ public class Globals {
     }
     
     protected static void init() {
+
         worldObjects = new CopyOnWriteArrayList<>();
         renderObjects = new CopyOnWriteArrayList<>();
         add(camera);
