@@ -6,7 +6,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 public class Ticker implements Runnable {
 
@@ -59,7 +58,7 @@ public class Ticker implements Runnable {
         }
         
 //        System.out.println(Globals.camera.x + ", " + Globals.camera.y);
-        
+        System.out.println("MOUSE: " + Globals.mousePos());
         if (!entities.isEmpty()) {
             for (Tickable e : entities) {
                 e.tick((float) (time-lastTickTime)); // pass in deltaTime

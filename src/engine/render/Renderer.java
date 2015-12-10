@@ -134,8 +134,13 @@ public class Renderer implements Runnable {
         spriteShader = new BasicSpriteShader();
         screenShader = new ScreenShader(aaOn);
         
+        
         PlayerShip ship = new PlayerShip(300, 300, 0);
         Globals.add(ship);
+        
+        //ParticleSystem p = new ParticleSystem(500, 500, 0, new Vector2f(0,0), 2, 2, 3);
+        //Globals.add(p);
+        
         while (!Display.isCloseRequested()) {
             now = Globals.getTime();
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -161,7 +166,6 @@ public class Renderer implements Runnable {
             }
             
             //ship.rotate(0.5f);
-            
             endSpriteRender();
             // --END SPRITE RENDER--
 

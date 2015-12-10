@@ -9,12 +9,14 @@ import org.newdawn.slick.opengl.Texture;
 
 
 public class Projectile extends GameObject {
+    
+    public static final float MISSILE_ACCEL = 0.8f; // missile accel in pix per frame
 
     public static enum ProjectileType {
         
         // projectile defs
         LASER(Loader.getTexture("laser"), 12.54f, 20, 1),
-        MISSILE(Loader.getTexture("missile"), 185.67f, 5, 2);
+        MISSILE(Loader.getTexture("missile"), 185.67f, 1, 2);
         
         Texture tex;
         float damage;
@@ -61,8 +63,8 @@ public class Projectile extends GameObject {
     
     
     
-    public static final int WIDTH = 20;
-    public static final int HEIGHT = 20;
+    //public static final int WIDTH = 20;
+    //public static final int HEIGHT = 20;
     
     protected ProjectileType type;
     
@@ -90,7 +92,12 @@ public class Projectile extends GameObject {
     @Override
     public void tick(float deltaTime) {
         Vector2f.add(pos, delta, pos); // <- do residual velocity
-        move(rotation, speed); // <-do thrust
+        move(rotation, speed); // <-do self movement
+        
+        if(type==ProjectileType.MISSILE) { // do missile things
+            speed += MISSILE_ACCEL;
+        }
+        
         
         if (frames > 170 && !isVisible()) Globals.remove(this);
         frames++;

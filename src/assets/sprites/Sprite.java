@@ -7,7 +7,7 @@ import org.newdawn.slick.opengl.Texture;
 
 public abstract class Sprite implements RenderObject {
     
-    protected Texture tex;
+    private Texture tex;
     protected Vector2f pos;
     public float rotation,priority;
     protected float width,height;
@@ -16,7 +16,6 @@ public abstract class Sprite implements RenderObject {
         this(tex, new Vector2f(x,y), 50f, 50f, rotation);
         this.priority = priority;
     }
-    
     public Sprite(Texture tex, Vector2f position, float width, float height, float rotation) {
         this(tex, position, width, height, rotation, 1);
     }

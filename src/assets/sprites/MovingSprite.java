@@ -17,10 +17,6 @@ public abstract class MovingSprite extends Sprite implements Tickable {
     public void tick(float deltaTime) {
         super.translate(delta.x, delta.y);
     }
-    
-    private void log(Object s) {
-        System.out.println(s);
-    }
 
     public float getDeltaX() {
         return delta.x;

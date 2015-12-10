@@ -15,10 +15,9 @@ public final class PlayerShip extends Ship {
 
     private float THRUST = 0.18f;
     private float TURN_RATE = 3.425f;
-    
 
     public PlayerShip(float x, float y, float rot) {
-        super(new Vector2f(x, y), rot, new Vector2f(0, 0), Globals.getUserName());
+        super(new Vector2f(x, y), rot, new Vector2f(0, 0), Globals.userName());
         delta = new Vector2f(0, 0);
         ammoType = ProjectileType.LASER;
     }
@@ -60,10 +59,10 @@ public final class PlayerShip extends Ship {
 
         if (Mouse.isButtonDown(ACCEL_MBUTTON) || Keyboard.isKeyDown(Keyboard.KEY_W)) {
             if (useEnergy(0.23f)) {
-                setAccel(true);
+                setAccelerating(true);
             }
         } else {
-            setAccel(false);
+            setAccelerating(false);
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && isAccelerating()) {
             if (useEnergy(0.13f)) {
@@ -84,7 +83,8 @@ public final class PlayerShip extends Ship {
         calculateShieldRecharge();
 
         if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
-            energy += 5;
+            energy += 25;
+            missileMag = 50;
         }
 
         //weapons
@@ -95,9 +95,10 @@ public final class PlayerShip extends Ship {
             ammoType = ProjectileType.MISSILE;
             turbo = false;
         } else if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
-            //turbo lasers
-            ammoType = ProjectileType.LASER;
+            //turbo lasers or missiles
             turbo = true;
+            laserCount = TURBO_LASER_DELAY;
+            missileCount = TURBO_MISSILE_DELAY;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
             firing = true;
@@ -116,7 +117,12 @@ public final class PlayerShip extends Ship {
                     //play sound - energy fail
                 }
             } else if (ammoType == ProjectileType.MISSILE && missileCount <= 0 && missileMag > 0) {
-                if (useEnergy(0.16f)) {
+                if(turbo) {
+                    if(useEnergy(20f)) {
+                        missileCount = TURBO_MISSILE_DELAY;
+                        fire(ProjectileType.MISSILE);
+                    }
+                } else if (useEnergy(0.16f)) {
                     missileCount = MISSILE_DELAY;
                     fire(ProjectileType.MISSILE);
                 } else {
@@ -144,7 +150,7 @@ public final class PlayerShip extends Ship {
         System.out.println("POSITION: " + pos + ", ROTATION: " + rotation);
 
 //        System.out.println(Game.isFastTicking(this));
-//        if(accelerating) Game.add(new EngineParticle(x - Math.cos(Math.toRadians(rotation)) * 6.5, y - Math.sin(Math.toRadians(rotation)) * 6.5, -Math.cos(Math.toRadians(rotation))*1.5, -Math.sin(Math.toRadians(rotation))*1.5, new Color(200, 200, 200, 145)));
+//        if(isAccelerating) Game.add(new EngineParticle(x - Math.cos(Math.toRadians(rotation)) * 6.5, y - Math.sin(Math.toRadians(rotation)) * 6.5, -Math.cos(Math.toRadians(rotation))*1.5, -Math.sin(Math.toRadians(rotation))*1.5, new Color(200, 200, 200, 145)));
 //        else Game.add(new EngineParticle(x - Math.cos(Math.toRadians(rotation)) * 12, y - Math.sin(Math.toRadians(rotation)) * 12, Color.DARK_GRAY));
         if (frames % 3 == 0) {
             if (Globals.isMulti()) {
