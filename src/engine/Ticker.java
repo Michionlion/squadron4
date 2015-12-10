@@ -5,11 +5,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 public class Ticker implements Runnable {
 
-    public float MILLIS_PER_FRAME;
+//    public float MILLIS_PER_FRAME;
     
     ScheduledExecutorService scheduler;
     
@@ -25,7 +26,7 @@ public class Ticker implements Runnable {
 
     
     public Ticker(int tps) {
-        MILLIS_PER_FRAME = 1_000 / tps;
+//        MILLIS_PER_FRAME = 1_000 / tps;
         targetTPS = tps;
         
         this.tps = -1;
@@ -43,11 +44,25 @@ public class Ticker implements Runnable {
     }
 
     public void logic() {
-        long time = System.currentTimeMillis();
-        System.out.println("MOUSE: Vec2[" + Mouse.getX() + ", " + (Globals.HEIGHT-Mouse.getY()) + "]");
+        double time = Globals.getTime();
+//        System.out.println("MOUSE: Vec2[" + Mouse.getX() + ", " + (Globals.HEIGHT-Mouse.getY()) + "]");
+        if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+            Globals.camera.x += 5f;
+        } else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+            Globals.camera.x -= 5f;
+        }
+        
+        if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+            Globals.camera.y -= 5f;
+        } else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+            Globals.camera.y += 5f;
+        }
+        
+//        System.out.println(Globals.camera.x + ", " + Globals.camera.y);
+        
         if (!entities.isEmpty()) {
             for (Tickable e : entities) {
-                e.tick();
+                e.tick((float) (time-lastTickTime)); // pass in deltaTime
             }
         }
         totalTicks++;
@@ -55,7 +70,7 @@ public class Ticker implements Runnable {
 
     public void end() {
         running = false;
-        scheduler.shutdownNow();
+        scheduler.shutdown();
     }
 
     public void add(Tickable e) {

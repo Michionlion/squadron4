@@ -3,12 +3,12 @@ package engine;
 import engine.interfaces.RenderObject;
 import engine.interfaces.Tickable;
 import engine.render.Renderer;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.Rectangle;
 
 public class Globals {
     
@@ -34,7 +34,7 @@ public class Globals {
     public static CopyOnWriteArrayList<GameObject> gameObjects;
     public static CopyOnWriteArrayList<RenderObject> renderObjects;
     
-    public static Rectangle viewArea = new Rectangle(0, 0, WIDTH, HEIGHT);
+    public static Camera camera = new Camera(0, 0, WIDTH, HEIGHT);
     
     
     
@@ -73,17 +73,17 @@ public class Globals {
         return System.nanoTime() / 1_000_000d;
     }
     
-    protected static void initArrays() {
+    protected static void init() {
         gameObjects = new CopyOnWriteArrayList<>();
         renderObjects = new CopyOnWriteArrayList<>();
+        add(camera);
     }
     
     protected static void startGame() {
         Thread renderThread = new Thread(RENDERER, "renderThread");
         Thread tickThread = new Thread(TICKER, "tickThread");
         
-        initArrays();
-        
+        init();
         
         renderThread.start();
         while(!Display.isCreated()) {
@@ -93,6 +93,7 @@ public class Globals {
                 Logger.getLogger(Globals.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
         tickThread.start();
     }
 

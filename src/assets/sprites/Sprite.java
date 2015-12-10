@@ -2,8 +2,6 @@ package assets.sprites;
 
 import engine.Globals;
 import engine.interfaces.RenderObject;
-import engine.util.Util;
-import org.lwjgl.util.Point;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
@@ -49,6 +47,16 @@ public abstract class Sprite implements RenderObject {
     @Override
     public Texture getTex() {
         return tex;
+    }
+    
+    protected void setTex(Texture t) {
+        if(t.equals(tex)) {
+            return; // don't need to change anything, same image
+        } else if(t.getImageHeight()==tex.getImageHeight() && t.getImageWidth()==tex.getImageWidth()) {
+            tex = t;
+        } else {
+            throw new IllegalArgumentException("Texture passed is not the same size!");
+        }
     }
 
     public float getWidth() {
@@ -108,9 +116,18 @@ public abstract class Sprite implements RenderObject {
 
     @Override
     public boolean isVisible() {
-        boolean i = Globals.viewArea.contains(Math.round(pos.x), Math.round(pos.y));
-        boolean f = Globals.viewArea.contains(Math.round(pos.x+width), Math.round(pos.y+height));
-        boolean e = Globals.viewArea.contains(Math.round(pos.x-width), Math.round(pos.y-height));
+        
+        boolean i = Globals.camera.contains(pos.x, pos.y);
+        boolean f = Globals.camera.contains(pos.x+width, pos.y+height);
+        boolean e = Globals.camera.contains(pos.x-width, pos.y-height);
         return i||f||e;
+    }
+
+    public float getRenderX() {
+        return getX() - Globals.camera.x;
+    }
+
+    public float getRenderY() {
+        return getY() - Globals.camera.y;
     }
 }

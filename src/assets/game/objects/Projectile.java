@@ -88,7 +88,7 @@ public class Projectile extends GameObject {
     }
     
     @Override
-    public void tick() {
+    public void tick(float deltaTime) {
         Vector2f.add(pos, delta, pos); // <- do residual velocity
         move(rotation, speed); // <-do thrust
         

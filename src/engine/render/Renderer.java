@@ -2,11 +2,9 @@ package engine.render;
 
 import assets.Loader;
 import assets.game.objects.PlayerShip;
-import assets.game.objects.Ship;
 import assets.models.RawModel;
 import assets.shaders.BasicSpriteShader;
 import assets.shaders.ScreenShader;
-import assets.sprites.MovingSprite;
 import assets.sprites.Sprite;
 import engine.Globals;
 import engine.interfaces.Interpolatable;
@@ -244,9 +242,9 @@ public class Renderer implements Runnable {
         Matrix4f tMatrix;
         if (toRender instanceof Interpolatable) {
             Interpolatable i = (Interpolatable) toRender;
-            tMatrix = Util.createSpriteTransformationMatrix(toRender.getX() + (i.getDeltaX() * interpolation), toRender.getY() + (i.getDeltaY() * interpolation), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
+            tMatrix = Util.createSpriteTransformationMatrix(toRender.getRenderX() + (i.getDeltaX() * interpolation), toRender.getRenderY() + (i.getDeltaY() * interpolation), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
         } else {
-            tMatrix = Util.createSpriteTransformationMatrix(toRender.getX(), toRender.getY(), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
+            tMatrix = Util.createSpriteTransformationMatrix(toRender.getRenderX(), toRender.getRenderY(), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
         }
         
         shader.loadTransformationMatrix(tMatrix);

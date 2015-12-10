@@ -27,9 +27,9 @@ public abstract class Ship extends GameObject {
     public static final int SHIELD_OVERCHARGE_DELAY = 80;
     
     
+    private boolean accelerating = false;
+    private boolean dead = false;
     protected float speedLimit = SPEED_LIMIT;
-    protected boolean accelerating = false;
-    protected boolean dead = false;
     protected ProjectileType ammoType;
     protected boolean firing;
     protected boolean slowDown = false;
@@ -51,7 +51,7 @@ public abstract class Ship extends GameObject {
     }
     
     @Override
-    public void tick() {
+    public void tick(float deltaTime) {
         
         move(delta);
         frames++;
@@ -181,14 +181,19 @@ public abstract class Ship extends GameObject {
     
     public void setAccel(boolean accel) {
         accelerating = accel;
+        
     }
     
-    public boolean getAccel() {
+    public boolean isAccelerating() {
         return accelerating;
     }
     
     public String getName() {
         return name;
+    }
+    
+    public boolean isDead() {
+        return dead;
     }
     
     protected void die() {
