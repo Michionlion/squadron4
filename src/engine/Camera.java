@@ -27,6 +27,10 @@ public class Camera extends Rectangle2D.Float implements Tickable {
         System.out.println(delta);
     }
     
+    public float distanceSq(float x, float y) { // dis from center of screen
+        return ((this.x+width/2) - x) * ((this.x+width/2) - x) + ((this.y+height/2) - y) * ((this.y+height/2) - y);
+    }
+    
     public void centerOn(float x, float y) {
         setLocation(x-width/2, y-height/2);
     }

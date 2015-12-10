@@ -14,7 +14,7 @@ public final class PlayerShip extends Ship {
     public static int ACCEL_MBUTTON = 0;
 
     private float THRUST = 0.18f;
-    private float TURN_RATE = 2.425f;
+    private float TURN_RATE = 3.425f;
 
     public PlayerShip(float x, float y, float rot) {
         super(new Vector2f(x, y), rot, new Vector2f(0, 0), Globals.userName());
@@ -140,6 +140,8 @@ public final class PlayerShip extends Ship {
 
         
         doCameraFollow();
+        
+        engine.setLocation(pos.x, pos.y);
         
         
         laserCount--;
