@@ -5,7 +5,6 @@ import engine.GameObject;
 import engine.Globals;
 import engine.util.Util;
 import org.lwjgl.util.vector.Vector2f;
-import org.newdawn.slick.opengl.Texture;
 
 public class ParticleSystem extends GameObject {
     
@@ -50,7 +49,7 @@ public class ParticleSystem extends GameObject {
             rot = (float) (Math.random()*360);
             d.set((float) Math.cos(Math.toRadians(rot)*emitSpeed), (float) Math.sin(Math.toRadians(rot)*emitSpeed));
             Globals.add(new SmokeParticle(Util.copy(pos), 0, Vector2f.add(delta, d, d), this));
-            System.out.println("PARTICLE CREATED: " + pos + ", " + rot + ", " + d);
+//            System.out.println("PARTICLE CREATED: " + pos + ", " + rot + ", " + d);
         }
     }
 

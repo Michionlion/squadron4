@@ -144,7 +144,7 @@ public final class PlayerShip extends Ship {
         shieldCount--;
         frames++;
 
-        System.out.println("POSITION: " + pos + ", ROTATION: " + rotation);
+//        System.out.println("POSITION: " + pos + ", ROTATION: " + rotation);
 
 //        System.out.println(Game.isFastTicking(this));
 //        if(isAccelerating) Game.add(new EngineParticle(x - Math.cos(Math.toRadians(rotation)) * 6.5, y - Math.sin(Math.toRadians(rotation)) * 6.5, -Math.cos(Math.toRadians(rotation))*1.5, -Math.sin(Math.toRadians(rotation))*1.5, new Color(200, 200, 200, 145)));

@@ -44,7 +44,7 @@ public class Ticker implements Runnable {
 
     public void logic() {
         long time = System.currentTimeMillis();
-        System.out.println("MOUSE: " + Globals.mousePos());
+//        System.out.println("MOUSE: " + Globals.mousePos());
         if (!entities.isEmpty()) {
             for (Tickable e : entities) {
                 e.tick();
