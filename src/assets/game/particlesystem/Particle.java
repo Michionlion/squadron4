@@ -23,8 +23,8 @@ public class Particle extends WorldObject {
     }
     
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(float deltaTime) {
+        super.tick(deltaTime);
         if(parent.frames-born > lifetime) { // add || !isVisible() if wish to remove if outside screen, but won't persist until lifetime if you go back to same area
             Globals.remove(this);
         }

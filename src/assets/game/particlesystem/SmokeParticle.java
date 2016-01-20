@@ -21,8 +21,8 @@ public class SmokeParticle extends Particle {
     }
     
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(float deltaTime) {
+        super.tick(deltaTime);
         if(born == 6) System.out.println(animIndex);
         if(parent.frames-born % 10==0) animIndex++;
     }
