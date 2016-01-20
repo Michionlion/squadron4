@@ -4,6 +4,7 @@ import assets.Loader;
 import engine.GameObject;
 import engine.Globals;
 import engine.util.Util;
+import java.io.File;
 import org.lwjgl.util.vector.Vector2f;
 
 public class ParticleSystem extends GameObject {
@@ -18,10 +19,12 @@ public class ParticleSystem extends GameObject {
     
 
     public ParticleSystem(float x, float y, float rotation, Vector2f delta, float emitSpeed, int emitDelay, int emitAmount) {
-        super(Loader.getTexture("smoke"), new Vector2f(x,y), rotation, delta, new Vector2f(8,8));
+        super(Loader.getTexture("smoke" + File.separator + 1), new Vector2f(x,y), rotation, delta, new Vector2f(8,8));
         this.emitSpeed = emitSpeed;
         this.emitDelay = emitDelay;
         this.emitAmount = emitAmount;
+        
+        SmokeParticle.init();
     }
     
     @Override

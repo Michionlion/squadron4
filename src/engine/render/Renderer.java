@@ -255,7 +255,7 @@ public class Renderer implements Runnable {
         }
         
         shader.loadTransformationMatrix(tMatrix);
-
+        
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, toRender.getTex().getTextureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES, QUAD.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
         shader.stop();

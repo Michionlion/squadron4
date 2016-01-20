@@ -1,5 +1,6 @@
 package engine;
 
+import assets.game.particlesystem.SmokeParticle;
 import assets.sprites.WorldObject;
 import engine.interfaces.RenderObject;
 import engine.interfaces.Tickable;

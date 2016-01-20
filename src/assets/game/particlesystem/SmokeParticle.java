@@ -1,6 +1,7 @@
 package assets.game.particlesystem;
 
 import assets.Loader;
+import java.io.File;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
@@ -9,8 +10,9 @@ public class SmokeParticle extends Particle {
     public int animIndex = -1;
     
     public static void init() {
+        // go from 0 to 9
         for(int i=0; i < SMOKE.length; i++) {
-            SMOKE[i] = Loader.getTexture("smoke"); // + i when smoke texs implemented
+            SMOKE[i] = Loader.getTexture("smoke" + File.separator + (i+1)); // + i when smoke texs implemented
         }
     }
     
