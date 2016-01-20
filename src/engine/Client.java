@@ -3,7 +3,6 @@ package engine;
 import assets.ShipManager;
 import assets.game.objects.Projectile;
 import assets.game.objects.Projectile.ProjectileType;
-import assets.game.objects.Ship;
 import assets.game.objects.ShipDisplay;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,7 +34,6 @@ public class Client implements Runnable {
     @Override
     public void run() {
         try {
-
             send(Globals.userName());
             String input;
             while (in.hasNextLine()) {

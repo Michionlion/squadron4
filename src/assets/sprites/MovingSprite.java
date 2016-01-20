@@ -14,7 +14,7 @@ public abstract class MovingSprite extends Sprite implements Tickable {
     }
 
     @Override
-    public void tick() {
+    public void tick(float deltaTime) {
         super.translate(delta.x, delta.y);
     }
 

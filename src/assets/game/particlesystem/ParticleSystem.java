@@ -14,20 +14,19 @@ public class ParticleSystem extends GameObject {
     protected int emitDelay,emitAmount;
     
     protected int delay = 0;
-    protected int frames = Integer.MAX_VALUE- 60;
+    protected int frames = 0;
     
 
     public ParticleSystem(float x, float y, float rotation, Vector2f delta, float emitSpeed, int emitDelay, int emitAmount) {
-        super(Loader.getTexture("close"), new Vector2f(x,y), rotation, delta, new Vector2f(16,16));
-        SmokeParticle.init();
+        super(Loader.getTexture("smoke"), new Vector2f(x,y), rotation, delta, new Vector2f(8,8));
         this.emitSpeed = emitSpeed;
         this.emitDelay = emitDelay;
         this.emitAmount = emitAmount;
     }
     
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(float deltaTime) {
+        super.tick(deltaTime);
         
         if(delay <= 0)  {
             emit(emitAmount);
@@ -41,7 +40,6 @@ public class ParticleSystem extends GameObject {
     
     //generic randomized smoke system emit
     public void emit(int amt) {
-        float x = pos.x, y=pos.y;
         float rot;
         Vector2f d = new Vector2f(0,0);
         

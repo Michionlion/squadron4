@@ -2,6 +2,7 @@ package assets.game.objects;
 
 import assets.Loader;
 import assets.game.objects.Projectile.ProjectileType;
+import assets.game.particlesystem.ParticleSystem;
 import engine.GameObject;
 import engine.Globals;
 import engine.util.*;
@@ -32,9 +33,9 @@ public abstract class Ship extends GameObject {
     public static final int SHIELD_OVERCHARGE_DELAY = 80;
     
     
+    private boolean accelerating = false;
+    private boolean dead = false;
     protected float speedLimit = SPEED_LIMIT;
-    protected boolean accelerating = false;
-    protected boolean dead = false;
     protected ProjectileType ammoType;
     protected boolean firing;
     protected boolean slowDown = false;
@@ -48,17 +49,24 @@ public abstract class Ship extends GameObject {
     protected int shieldCount = 0;
     protected int missileCount = 0;
     protected int frames;
+    
     protected String name;
+    
+    protected ParticleSystem engine;
 
     public Ship(Vector2f pos, float rotation, Vector2f delta, String name) {
         super(OFF_TEX, pos, rotation, delta, new Vector2f(64,64));
         this.name = name;
+        
+        engine = new ParticleSystem(pos.x, pos.y, 0, new Vector2f(0, 0), 1, 1, 3);
+        Globals.add(engine);
     }
     
     @Override
-    public void tick() {
+    public void tick(float deltaTime) { // not called from sub-classes!
         
         move(delta);
+        engine.setLocation(pos.x, pos.y);
         frames++;
     }
     
@@ -196,6 +204,10 @@ public abstract class Ship extends GameObject {
     
     public String getName() {
         return name;
+    }
+    
+    public boolean isDead() {
+        return dead;
     }
     
     protected void die() {

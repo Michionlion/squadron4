@@ -8,7 +8,6 @@ import assets.game.particlesystem.ParticleSystem;
 import assets.models.RawModel;
 import assets.shaders.BasicSpriteShader;
 import assets.shaders.ScreenShader;
-import assets.sprites.MovingSprite;
 import assets.sprites.Sprite;
 import engine.Globals;
 import engine.interfaces.Interpolatable;
@@ -142,8 +141,8 @@ public class Renderer implements Runnable {
         PlayerShip ship = new PlayerShip(300, 300, 0);
         Globals.add(ship);
         
-        ParticleSystem p = new ParticleSystem(500, 500, 0, new Vector2f(0,0), 2, 2, 3);
-        Globals.add(p);
+//        ParticleSystem p = new ParticleSystem(500, 500, 0, new Vector2f(0,0), 2, 2, 3);
+//        Globals.add(p);
         
         while (!Display.isCloseRequested()) {
             now = Globals.getTime();
@@ -250,9 +249,9 @@ public class Renderer implements Runnable {
         Matrix4f tMatrix;
         if (toRender instanceof Interpolatable) {
             Interpolatable i = (Interpolatable) toRender;
-            tMatrix = Util.createSpriteTransformationMatrix(toRender.getX() + (i.getDeltaX() * interpolation), toRender.getY() + (i.getDeltaY() * interpolation), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
+            tMatrix = Util.createSpriteTransformationMatrix(toRender.getRenderX() + (i.getDeltaX() * interpolation), toRender.getRenderY() + (i.getDeltaY() * interpolation), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
         } else {
-            tMatrix = Util.createSpriteTransformationMatrix(toRender.getX(), toRender.getY(), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
+            tMatrix = Util.createSpriteTransformationMatrix(toRender.getRenderX(), toRender.getRenderY(), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
         }
         
         shader.loadTransformationMatrix(tMatrix);

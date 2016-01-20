@@ -1,6 +1,5 @@
 package assets.game.objects;
 
-import assets.Loader;
 import assets.ShipManager;
 import assets.game.objects.Projectile.ProjectileType;
 import engine.Globals;
@@ -15,7 +14,7 @@ public final class PlayerShip extends Ship {
     public static int ACCEL_MBUTTON = 0;
 
     private float THRUST = 0.18f;
-    private float TURN_RATE = 2.425f;
+    private float TURN_RATE = 3.425f;
 
     public PlayerShip(float x, float y, float rot) {
         super(new Vector2f(x, y), rot, new Vector2f(0, 0), Globals.userName());
@@ -24,15 +23,14 @@ public final class PlayerShip extends Ship {
     }
 
     @Override
-    public void tick() {
+    public void tick(float deltaTime) {
 
         if (energy <= ENERGY_AMOUNT) {
             energy += ENERGY_RECHARGE;
         } else if (energy >= ENERGY_AMOUNT) {
             energy = ENERGY_AMOUNT;
         }
-
-        double desiredRot = Math.toDegrees(Math.atan2(Mouse.getX() - (pos.x - Globals.viewArea.getX()), (Globals.HEIGHT-Mouse.getY()) - (pos.y - Globals.viewArea.getY())));
+        double desiredRot = Math.toDegrees(Math.atan2(Mouse.getX() - (pos.x - Globals.camera.x), (Globals.HEIGHT-Mouse.getY()) - (pos.y - Globals.camera.y)));
         if (Math.abs(desiredRot - rotation) > TURN_RATE / 2f) {
             
             double currentRot = rotation;
@@ -58,6 +56,7 @@ public final class PlayerShip extends Ship {
 
             }
         }
+
         if (Mouse.isButtonDown(ACCEL_MBUTTON) || Keyboard.isKeyDown(Keyboard.KEY_W)) {
             if (useEnergy(0.23f)) {
                 setAccelerating(true);
@@ -135,10 +134,16 @@ public final class PlayerShip extends Ship {
             firing = false;
         }
 
-        if (armor <= 0 && !dead) {
+        if (armor <= 0 && !isDead()) {
             die();
         }
 
+        
+        doCameraFollow();
+        
+        engine.setLocation(pos.x, pos.y);
+        
+        
         laserCount--;
         missileCount--;
         shieldCount--;
@@ -173,13 +178,14 @@ public final class PlayerShip extends Ship {
 
     private void calculateMovement() {
 
-        float deltaLength = (float) Math.sqrt(delta.lengthSquared());
+        float deltaLength = delta.length();
 
         if (isAccelerating()) {
             double r = Math.toRadians(rotation);
             Vector2f accel;
             accel = new Vector2f((float) (Math.sin(r) * THRUST), (float) (Math.cos(r) * THRUST));
             Vector2f.add(delta, accel, delta);
+            
         }
         //calculate if warping or slowing down
         calculateWarpMovement();
@@ -211,17 +217,20 @@ public final class PlayerShip extends Ship {
             }
         }
 
-        //actually do movement and -center-
+        //actually do movement
         Vector2f.add(pos, delta, pos);
         if (Globals.isMulti()) {
             Globals.CLIENT.sendPos(getX(), getY(), getRotation());
         }
     }
+    
+    private void doCameraFollow() {
+        Globals.camera.centerOn(getX(), getY());
+    }
 
     @Override
     protected void die() {
-        dead = true;
-        System.out.println("dead");
+        super.die();
 
         if (Globals.isMulti()) {
             Globals.CLIENT.sendMSG("/dead", "");
@@ -231,6 +240,6 @@ public final class PlayerShip extends Ship {
 
     @Override
     public boolean interpolate() {
-        return true;
+        return false;
     }
 }

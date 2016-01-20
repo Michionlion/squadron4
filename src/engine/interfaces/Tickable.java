@@ -1,5 +1,5 @@
 package engine.interfaces;
 
 public interface Tickable {
-    public void tick();
+    public void tick(float deltaTime);
 }

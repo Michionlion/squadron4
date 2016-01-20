@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.Rectangle;
 import org.lwjgl.util.vector.Vector2f;
 
 public class Globals {
@@ -37,7 +36,7 @@ public class Globals {
     public static CopyOnWriteArrayList<WorldObject> worldObjects;
     public static CopyOnWriteArrayList<RenderObject> renderObjects;
     
-    public static Rectangle viewArea = new Rectangle(0, 0, WIDTH, HEIGHT);
+    public static Camera camera = new Camera(0, 0, WIDTH, HEIGHT);
     
     
     
@@ -84,17 +83,18 @@ public class Globals {
         return System.nanoTime() / 1_000_000d;
     }
     
-    protected static void initArrays() {
+    protected static void init() {
+
         worldObjects = new CopyOnWriteArrayList<>();
         renderObjects = new CopyOnWriteArrayList<>();
+        add(camera);
     }
     
     protected static void startGame() {
         Thread renderThread = new Thread(RENDERER, "renderThread");
         Thread tickThread = new Thread(TICKER, "tickThread");
         
-        initArrays();
-        
+        init();
         
         renderThread.start();
         while(!Display.isCreated()) {
@@ -104,6 +104,7 @@ public class Globals {
                 Logger.getLogger(Globals.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
         tickThread.start();
     }
 
