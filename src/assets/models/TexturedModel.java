@@ -3,10 +3,10 @@ package assets.models;
 import org.newdawn.slick.opengl.Texture;
 
 public class TexturedModel {
-    
+
     private RawModel rawModel;
     private Texture texture;
-    
+
     public TexturedModel(RawModel model, Texture tex) {
         this.rawModel = model;
         this.texture = tex;
@@ -19,7 +19,7 @@ public class TexturedModel {
     public Texture getTexture() {
         return texture;
     }
-    
-    
-    
+
+
+
 }

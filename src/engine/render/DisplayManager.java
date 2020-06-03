@@ -10,12 +10,12 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayManager {
-    
 
-    
+
+
 
     public static void createDisplay() {
-        
+
         try {
             Display.setDisplayMode(new DisplayMode(Globals.WIDTH, Globals.HEIGHT));
             Display.create(new PixelFormat(), new ContextAttribs());
@@ -23,7 +23,7 @@ public class DisplayManager {
         } catch (LWJGLException ex) {
             Logger.getLogger(Globals.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
 //        GL11.glViewport(0, 0, Globals.WIDTH, Globals.HEIGHT);
     }
 
@@ -33,7 +33,7 @@ public class DisplayManager {
     }
 
     public static void closeDisplay() {
-        
+
         Display.destroy();
     }
 

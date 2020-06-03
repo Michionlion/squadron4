@@ -22,12 +22,12 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class Loader {
-    
+
     private static List<Integer> vaos = new ArrayList<>();
     private static List<Integer> vbos = new ArrayList<>();
     private static HashMap<String, Texture> textures = new HashMap<>();
     private static int renderTexture = -1;
-    
+
     public static RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices) {
         int vaoID = createVAO();
         bindIndicesBuffer(indices);
@@ -36,20 +36,20 @@ public class Loader {
         unbindVAO();
         return new RawModel(vaoID, indices.length);
     }
-    
+
     public static Texture getTexture(String fileName) {
         if(textures.containsKey(fileName)) return textures.get(fileName);
         else return loadTexture(fileName);
     }
-    
+
     public static int getTextureID(String fileName) {
         if(textures.containsKey(fileName)) return textures.get(fileName).getTextureID();
         else return loadTexture(fileName).getTextureID();
     }
-    
+
     public static int getRenderTextureID() {
         if(renderTexture < 0) {
-            
+
             renderTexture = GL11.glGenTextures();
 //            IntBuffer textureHandle = BufferUtils.createIntBuffer(1);
 //            GL11.glGenTextures(textureHandle);
@@ -60,27 +60,27 @@ public class Loader {
             GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
             GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, Globals.WIDTH, Globals.HEIGHT, 0, GL11.GL_RGBA, GL11.GL_FLOAT, (java.nio.ByteBuffer) null);
        //        glTexImage2D(     GL_TEXTURE_2D, 0,      GL_RGBA8,           512,            512, 0,      GL_RGBA,        GL_INT, (java.nio.ByteBuffer) null);
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
             return renderTexture;
         } else {
             return renderTexture;
         }
     }
-    
+
     private static Texture loadTexture(String fileName) {
         Texture tex = null;
-        
+
         try {
             System.out.println("Starting load " + fileName);
-            
+
             InputStream in = ResourceLoader.getResourceAsStream("res/art/"+fileName+".png");
             tex = TextureLoader.getTexture("PNG", in);
-            
+
             System.out.println("Loaded " + fileName);
         } catch (IOException ex) {
             System.err.println("Failed to load " + fileName);
@@ -93,14 +93,14 @@ public class Loader {
         textures.put(fileName, tex);
         return tex;
     }
-    
+
     private static int createVAO() {
         int vaoID = GL30.glGenVertexArrays();
         vaos.add(vaoID);
         GL30.glBindVertexArray(vaoID);
         return vaoID;
     }
-    
+
     private static void storeDataInAttributeList(int attNum, int dataSize, float[] data) {
         int vboID = GL15.glGenBuffers();
         vbos.add(vboID);
@@ -110,11 +110,11 @@ public class Loader {
         GL20.glVertexAttribPointer(attNum, dataSize, GL11.GL_FLOAT, false, 0, 0);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
-    
+
     private static void unbindVAO() {
         GL30.glBindVertexArray(0);
     }
-    
+
     private static void bindIndicesBuffer(int[] indices) {
         int vboID = GL15.glGenBuffers();
         vbos.add(vboID);
@@ -129,30 +129,30 @@ public class Loader {
         buffer.flip();
         return buffer;
     }
-    
+
     private static FloatBuffer storeDataInFloatBuffer(float[] data) {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
         buffer.put(data);
         buffer.flip();
         return buffer;
     }
-    
+
     public static void cleanUp() {
         for(int vao : vaos) {
             GL30.glDeleteVertexArrays(vao);
         }
         vaos.clear();
-        
+
         for(int vbo : vbos) {
             GL15.glDeleteBuffers(vbo);
         }
         vbos.clear();
-        
+
         for(Texture tex : textures.values()) {
             GL11.glDeleteTextures(tex.getTextureID());
         }
         textures.clear();
-        
+
         GL11.glDeleteTextures(renderTexture);
     }
 }

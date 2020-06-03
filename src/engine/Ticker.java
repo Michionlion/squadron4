@@ -10,9 +10,9 @@ import org.lwjgl.input.Keyboard;
 public class Ticker implements Runnable {
 
 //    public float MILLIS_PER_FRAME;
-    
+
     ScheduledExecutorService scheduler;
-    
+
     public double lastTickTime = Globals.getTime();
     private double lastFPS = Globals.getTime();
     private boolean running;
@@ -23,13 +23,13 @@ public class Ticker implements Runnable {
 
     private volatile CopyOnWriteArrayList<Tickable> entities = new CopyOnWriteArrayList<>();
 
-    
+
     public Ticker(int tps) {
 //        MILLIS_PER_FRAME = 1_000 / tps;
         targetTPS = tps;
-        
+
         this.tps = -1;
-        
+
         scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -50,13 +50,13 @@ public class Ticker implements Runnable {
         } else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
             Globals.camera.x -= 5f;
         }
-        
+
         if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
             Globals.camera.y -= 5f;
         } else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
             Globals.camera.y += 5f;
         }
-        
+
 //        System.out.println(Globals.camera.x + ", " + Globals.camera.y);
         System.out.println("MOUSE: " + Globals.mousePos());
         if (!entities.isEmpty()) {
@@ -90,8 +90,8 @@ public class Ticker implements Runnable {
     public int getTPS() {
         return tps;
     }
-    
-    
+
+
     private class Tick implements Runnable {
 
         @Override
@@ -106,6 +106,6 @@ public class Ticker implements Runnable {
             }
             ticks++;
         }
-        
+
     }
 }

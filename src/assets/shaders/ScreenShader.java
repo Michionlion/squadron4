@@ -8,10 +8,10 @@ public class ScreenShader extends ShaderProgram implements SpriteShader {
 
     private static final String VERTEX_FILE = "src/assets/shaders/screen_shader.vert";
     private static final String FRAGMENT_FILE = "src/assets/shaders/screen_shader.frag";
-    
+
     private int location_transformationMatrix;
     private int location_antiAliasingOn;
-    
+
     public ScreenShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
         start();
@@ -19,7 +19,7 @@ public class ScreenShader extends ShaderProgram implements SpriteShader {
         setAA(false);
         stop();
     }
-    
+
     public ScreenShader(boolean aaOn) {
         super(VERTEX_FILE, FRAGMENT_FILE);
         start();
@@ -27,8 +27,8 @@ public class ScreenShader extends ShaderProgram implements SpriteShader {
         setAA(aaOn);
         stop();
     }
-    
-    
+
+
     @Override
     protected void getAllUniformLocations() {
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
@@ -45,9 +45,9 @@ public class ScreenShader extends ShaderProgram implements SpriteShader {
     public void loadTransformationMatrix(Matrix4f tMatrix) {
         super.loadMatrix(location_transformationMatrix, tMatrix);
     }
-    
+
     public final void setAA(boolean aaOn) {
         super.loadBoolean(location_antiAliasingOn, aaOn);
     }
-    
+
 }

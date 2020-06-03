@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
 public abstract class Sprite implements RenderObject {
-    
+
     private Texture tex;
     protected Vector2f pos;
     public float rotation,priority;
@@ -24,21 +24,21 @@ public abstract class Sprite implements RenderObject {
         pos = position;
         setRotation(rotation);
         this.priority = priority;
-        
+
         this.width = width;
         this.height = height;
     }
-    
-    
+
+
     public void rotate(float toRot) {
         rotation+=toRot;
         checkRotation();
     }
-    
+
     public void translate(float x, float y) {
         pos.translate(x, y);
     }
-    
+
     public void translate(Vector2f t) {
         Vector2f.add(pos, t, pos);
     }
@@ -47,7 +47,7 @@ public abstract class Sprite implements RenderObject {
     public Texture getTex() {
         return tex;
     }
-    
+
     protected void setTex(Texture t) {
         if(t.equals(tex)) {
             return; // don't need to change anything, same image
@@ -82,7 +82,7 @@ public abstract class Sprite implements RenderObject {
         this.rotation = rotation;
         checkRotation();
     }
-    
+
     public void checkRotation() {
         if(rotation >=360) {
             rotation-=360;
@@ -92,7 +92,7 @@ public abstract class Sprite implements RenderObject {
             rotation+=360;
             checkRotation();
         }
-        
+
     }
 
     @Override
@@ -115,7 +115,7 @@ public abstract class Sprite implements RenderObject {
 
     @Override
     public boolean isVisible() {
-        
+
         boolean i = Globals.camera.contains(pos.x, pos.y);
         boolean f = Globals.camera.contains(pos.x+width, pos.y+height);
         boolean e = Globals.camera.contains(pos.x-width, pos.y-height);

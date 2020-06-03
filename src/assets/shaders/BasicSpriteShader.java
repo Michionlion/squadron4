@@ -7,10 +7,10 @@ import engine.util.Util;
 import org.lwjgl.util.vector.Matrix4f;
 
 public class BasicSpriteShader extends ShaderProgram implements SpriteShader {
-    
+
     private static final String VERTEX_FILE = "src/assets/shaders/sprite.vert";
     private static final String FRAGMENT_FILE = "src/assets/shaders/sprite.frag";
-    
+
     private int location_transformationMatrix;
 
     public BasicSpriteShader() {
@@ -30,7 +30,7 @@ public class BasicSpriteShader extends ShaderProgram implements SpriteShader {
     protected void getAllUniformLocations() {
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
     }
-    
+
     @Override
     public void loadTransformationMatrix(Matrix4f matrix) {
         super.loadMatrix(location_transformationMatrix, matrix);

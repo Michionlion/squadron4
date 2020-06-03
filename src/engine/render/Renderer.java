@@ -49,10 +49,10 @@ public class Renderer implements Runnable {
     private long renders = 0;
     private boolean aaOn;
     private boolean isInterpolating = false;
-    
+
     BasicSpriteShader spriteShader;
     ScreenShader screenShader;
-    
+
     public Renderer() {
         aaOn = false;
         if(Globals.OS.equals("WINDOWS")) {
@@ -60,11 +60,11 @@ public class Renderer implements Runnable {
             aaOn = true;
         }
     }
-    
+
     public Renderer(boolean aa) {
         aaOn = aa;
     }
-    
+
 
     @Override
     public void run() {
@@ -89,7 +89,7 @@ public class Renderer implements Runnable {
             Sys.alert("ERROR 3", "Unable to create Input Devices!");
             Logger.getLogger(Renderer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         if (!GLContext.getCapabilities().GL_EXT_framebuffer_object) {
             System.out.println("OpenGL render to FBO not supported on this platform, exiting!");
             System.exit(0);
@@ -103,7 +103,7 @@ public class Renderer implements Runnable {
 
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-        
+
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 
@@ -116,34 +116,34 @@ public class Renderer implements Runnable {
         int[] indices = {0, 1, 3, 3, 1, 2};
 
         QUAD = Loader.loadToVAO(verts, texs, indices);
-        
+
         //create FBO
         FBO = GL30.glGenFramebuffers();
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
-        
+
         GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, Loader.getRenderTextureID(), 0);
-        
+
 //        int error = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
 //        if(error != GL30.GL_FRAMEBUFFER_COMPLETE) {
 //            System.err.println("ERROR IN FRAME BUFFER, ERROR NUM = " + error);
 //        }
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
-        
-        
-        
-        
-        
+
+
+
+
+
         //render loop
         spriteShader = new BasicSpriteShader();
         screenShader = new ScreenShader(aaOn);
-        
-        
+
+
         PlayerShip ship = new PlayerShip(300, 300, 0);
         Globals.add(ship);
-        
+
 //        ParticleSystem p = new ParticleSystem(500, 500, 0, new Vector2f(0,0), 2, 2, 3);
 //        Globals.add(p);
-        
+
         while (!Display.isCloseRequested()) {
             now = Globals.getTime();
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -155,7 +155,7 @@ public class Renderer implements Runnable {
                 interpolation = 1;
             }
             clearRender();
-            
+
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
             clearFBO();
             // --SPRITE RENDER--
@@ -167,76 +167,76 @@ public class Renderer implements Runnable {
                     }
                 }
             }
-            
+
             //ship.rotate(0.5f);
             endSpriteRender();
             // --END SPRITE RENDER--
 
             GL11.glFinish();
-            
+
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
-            
-            
+
+
             //start and bind quad
             screenShader.start();
             GL30.glBindVertexArray(QUAD.getVaoID());
             GL20.glEnableVertexAttribArray(0);
             GL20.glEnableVertexAttribArray(1);
             GL13.glActiveTexture(GL13.GL_TEXTURE0);
-            
+
             screenShader.loadTransformationMatrix(Util.createSpriteTransformationMatrix(0, 0, 0, Globals.WIDTH, Globals.HEIGHT, 0));
-            
+
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, Loader.getRenderTextureID());
             GL11.glDrawElements(GL11.GL_TRIANGLES, QUAD.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-            
+
             //unbind
             GL20.glDisableVertexAttribArray(0);
             GL20.glDisableVertexAttribArray(1);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
             GL30.glBindVertexArray(0);
-            
+
             screenShader.stop();
-            
-            
+
+
             renders++;
             DisplayManager.updateDisplay();
             float renderTime = (float) (Globals.getTime() - now);
             //System.out.println("render " + renders + " done in " + renderTime + "ms.  FPS: " + Math.round(1/(renderTime/1_000f)));
             Display.setTitle("Squadron 4  -  TPS: " + Globals.TICKER.getTPS() + "  -  Sprites: " + Globals.renderObjects.size());
-            
+
         }
 
         Globals.TICKER.end();
-        
+
         spriteShader.cleanUp();
-        
+
         Loader.cleanUp();
         GL30.glDeleteFramebuffers(FBO);
         DisplayManager.closeDisplay();
     }
-    
+
     public void setAA(boolean aaOn) {
         this.aaOn = aaOn;
-        
+
     }
 
     public void clearRender() {
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
-    
+
     public void clearFBO() {
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
-    
+
     public void prepareSpriteRender() {
         GL30.glBindVertexArray(QUAD.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
     }
-    
+
     public void endSpriteRender() {
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
@@ -253,16 +253,16 @@ public class Renderer implements Runnable {
         } else {
             tMatrix = Util.createSpriteTransformationMatrix(toRender.getRenderX(), toRender.getRenderY(), toRender.getRotation(), toRender.getWidth(), toRender.getHeight(), toRender.getPriority());
         }
-        
+
         shader.loadTransformationMatrix(tMatrix);
-        
+
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, toRender.getTex().getTextureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES, QUAD.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
         shader.stop();
     }
-    
-    
-    
+
+
+
     private Vector2f vec2(float x, float y) {
         return new Vector2f(x,y);
     }

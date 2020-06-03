@@ -10,7 +10,7 @@ uniform mat4 projectionMatrix;
 
 void main(void) {
     pass_textureCoords = textureCoords;
-    
+
     float x = position.x;
     float y = position.y;
 

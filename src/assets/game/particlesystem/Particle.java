@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
 public class Particle extends WorldObject {
-    
+
     ParticleSystem parent;
     int born;
     int lifetime = 300; //Integer.MAX_VALUE if no limit except visibility in frames (see note below as well
@@ -21,7 +21,7 @@ public class Particle extends WorldObject {
     public boolean interpolate() {
         return false;
     }
-    
+
     @Override
     public void tick(float deltaTime) {
         super.tick(deltaTime);

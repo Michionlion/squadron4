@@ -88,10 +88,10 @@ public class Util {
     }
 
     public static Matrix4f createOrthoMatrix() {
-        
+
         Matrix4f m = new Matrix4f();
         m.setZero();
-        
+
         //float right = -(Globals.WIDTH / 2f);
         //float left = Globals.WIDTH / 2f;
         //float top = Globals.HEIGHT / 2f;
@@ -155,7 +155,7 @@ public class Util {
         vec.scale(scale);
         return vec;
     }
-    
+
     public static Vector2f copy(Vector2f v) {
         return new Vector2f(v.x, v.y);
     }

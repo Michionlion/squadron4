@@ -9,7 +9,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
 
 public final class PlayerShip extends Ship {
-    
+
     public static int TURN_MBUTTON = 1;
     public static int ACCEL_MBUTTON = 0;
 
@@ -32,9 +32,9 @@ public final class PlayerShip extends Ship {
         }
         double desiredRot = Math.toDegrees(Math.atan2(Mouse.getX() - (pos.x - Globals.camera.x), (Globals.HEIGHT-Mouse.getY()) - (pos.y - Globals.camera.y)));
         if (Math.abs(desiredRot - rotation) > TURN_RATE / 2f) {
-            
+
             double currentRot = rotation;
-            
+
             if (desiredRot < 0) {
                 desiredRot += 360;
             }
@@ -138,12 +138,12 @@ public final class PlayerShip extends Ship {
             die();
         }
 
-        
+
         doCameraFollow();
-        
+
         engine.setLocation(pos.x, pos.y);
-        
-        
+
+
         laserCount--;
         missileCount--;
         shieldCount--;
@@ -185,7 +185,7 @@ public final class PlayerShip extends Ship {
             Vector2f accel;
             accel = new Vector2f((float) (Math.sin(r) * THRUST), (float) (Math.cos(r) * THRUST));
             Vector2f.add(delta, accel, delta);
-            
+
         }
         //calculate if warping or slowing down
         calculateWarpMovement();
@@ -223,7 +223,7 @@ public final class PlayerShip extends Ship {
             Globals.CLIENT.sendPos(getX(), getY(), getRotation());
         }
     }
-    
+
     private void doCameraFollow() {
         Globals.camera.centerOn(getX(), getY());
     }

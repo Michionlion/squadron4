@@ -45,7 +45,7 @@ public class Client implements Runnable {
             System.out.println("Message: " + e.getMessage());
         }
     }
-    
+
     public void disconnect() {
         sendMSG("/end", "");
     }
@@ -85,13 +85,13 @@ public class Client implements Runnable {
             } else {
                 ShipManager.updateShip(name, pos, rot);
             }
-            
+
         } catch (NumberFormatException e) {
             System.out.println("failed to update pos for " + name);
         }
     }
-    
-    
+
+
     //  USE DELTAS
     private void processProj(String input) {
 //        System.out.println("recieved proj: " + input);
@@ -119,16 +119,16 @@ public class Client implements Runnable {
             System.out.println("failed to process /proj creation");
             System.out.println(info.length + " long array:" + info[0] + "," + info[1] + "," + info[2] + "," + info[3] + "," + info[4] + "," + info[5] + "," + info[6] + "," + info[7]);
         }
-        
+
 //        System.out.println("creating new projectile with: " + spawnX + " " + spawnY + " " + deltaX + " " + deltaY + " " + angle + " " + type);
-        
+
         Globals.add(new Projectile(pos, delta, angle, Projectile.convertID(type)));
     }
 
     private void processAccel(String input) {
         input = input.substring(7);
         String[] info = input.split(sepChar, 0);
-        
+
         if (info.length < 2) {
             return;
         }
@@ -201,7 +201,7 @@ public class Client implements Runnable {
         out.println(s);
         out.flush();
     }
-    
+
     /**
      * Sends the msg with the string as the command directly to the other end.  USE WITH CAUTION!
      * @param cmd the command to preface the object with
@@ -210,7 +210,7 @@ public class Client implements Runnable {
     public void sendMSG(String cmd, Object msg) {
         send(cmd + sepChar + msg);
     }
-    
+
     /**
      * Sends the object directly to the other end.  USE WITH CAUTION!
      * @param msg the object to send

@@ -10,10 +10,10 @@ import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
 public abstract class Ship extends GameObject {
-    
+
     public static final Texture ON_TEX = Loader.getTexture("spaceship-on");
     public static final Texture OFF_TEX = Loader.getTexture("spaceship-off");
-    
+
     public static final boolean SPEED_LIMIT_ON = true;
     public static final float SPEED_LIMIT = 3.85f;
     public static final float WARP_SPEED_LIMIT = 132.5f;
@@ -31,8 +31,8 @@ public abstract class Ship extends GameObject {
     public static final int TURBO_MISSILE_DELAY = 18;
     public static final int SHIELD_RECHARGE_DELAY = 35;
     public static final int SHIELD_OVERCHARGE_DELAY = 80;
-    
-    
+
+
     private boolean accelerating = false;
     private boolean dead = false;
     protected float speedLimit = SPEED_LIMIT;
@@ -49,27 +49,27 @@ public abstract class Ship extends GameObject {
     protected int shieldCount = 0;
     protected int missileCount = 0;
     protected int frames;
-    
+
     protected String name;
-    
+
     protected ParticleSystem engine;
 
     public Ship(Vector2f pos, float rotation, Vector2f delta, String name) {
         super(OFF_TEX, pos, rotation, delta, new Vector2f(64,64));
         this.name = name;
-        
+
         engine = new ParticleSystem(pos.x, pos.y, 0, new Vector2f(0, 0), 1, 1, 3);
         Globals.add(engine);
     }
-    
+
     @Override
     public void tick(float deltaTime) { // not called from sub-classes!
-        
+
         move(delta);
         engine.setLocation(pos.x, pos.y);
         frames++;
     }
-    
+
     public void calculateShieldRecharge() {
         if (shieldCount <= 0) {
                 if (shields < SHIELD_AMOUNT) {
@@ -107,7 +107,7 @@ public abstract class Ship extends GameObject {
                 if(Globals.isMulti()) Globals.CLIENT.sendVitals(armor, shields);
             }
     }
-    
+
     protected boolean useEnergy(float amount) {
         if (energy >= amount) {
             energy -= amount;
@@ -116,7 +116,7 @@ public abstract class Ship extends GameObject {
             return false;
         }
     }
-    
+
     public void fire(ProjectileType type) {
         float spawnX;
         float spawnY;
@@ -146,7 +146,7 @@ public abstract class Ship extends GameObject {
             Globals.add(new Projectile(new Vector2f(spawnX,spawnY), Util.copy(delta), spawnRot, type));
         }
     }
-    
+
     public void doDamage(float damage) {
         shieldCount = SHIELD_RECHARGE_DELAY;
 
@@ -172,44 +172,44 @@ public abstract class Ship extends GameObject {
 
         if(Globals.isMulti()) Globals.CLIENT.sendVitals(armor, shields);
     }
-    
+
     public void updateInfo(Vector2f pos, Vector2f delta, float rot) {
         this.pos = pos;
         this.delta = delta;
         setRotation(rot);
     }
-    
+
     public void setStats(float armor, float shields) {
         this.armor = armor;
         this.shields = shields;
     }
-    
+
     public double getArmor() {
         return armor;
     }
-    
+
     public double getShields() {
         return shields;
     }
-    
+
     public void setAccelerating(boolean accel) {
         accelerating = accel;
         if(accelerating) setTex(ON_TEX);
         else setTex(OFF_TEX);
     }
-    
+
     public boolean isAccelerating() {
         return accelerating;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public boolean isDead() {
         return dead;
     }
-    
+
     protected void die() {
         dead = true;
         System.out.println("dead: " + name);
