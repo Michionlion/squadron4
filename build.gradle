@@ -1,0 +1,174 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://repository.jboss.org/nexus/content/groups/public/"
+    }
+    mavenCentral()
+    jcenter()
+  }
+  dependencies {
+    classpath 'ch.raffael.markdown-doclet:markdown-doclet:+'
+  }
+}
+
+plugins {
+  id "java"
+  id "pmd"
+  id "application"
+  id "com.diffplug.gradle.spotless" version "3.27.1"
+  id "com.palantir.git-version" version "0.12.2"
+}
+
+apply plugin: 'ch.raffael.markdown-doclet'
+
+def calculateVersion() {
+  def details = versionDetails()
+  if (details != null && details.lastTag != null) {
+    def tag = details.lastTag.dropWhile { it == 'v' }
+
+    if (tag ==~ /([0-9]+)\.([0-9]+)\.([0-9]+)/) {
+      if (details.commitDistance > 0) {
+        return "${tag}-b${details.commitDistance}-SNAPSHOT"
+      } else {
+        return tag
+      }
+    }
+  }
+  return 'v0.0.0-b0-SNAPSHOT'
+}
+
+group = "com.squadron4"
+version = calculateVersion()
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+logger.lifecycle("Version: ${version}")
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+
+  def lwjglVersion = "2.9.3"
+  compile "org.lwjgl.lwjgl:lwjgl:${lwjglVersion}"
+  compile "org.lwjgl.lwjgl:lwjgl_util:${lwjglVersion}"
+  compile "org.lwjgl.lwjgl:lwjgl-platform:${lwjglVersion}:natives-windows"
+  compile "org.lwjgl.lwjgl:lwjgl-platform:${lwjglVersion}:natives-linux"
+  compile "org.lwjgl.lwjgl:lwjgl-platform:${lwjglVersion}:natives-osx"
+
+  compile group: 'org.slick2d', name: 'slick2d-core', version: '1.0.2'
+
+
+  implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
+  testImplementation group: 'org.testng', name: 'testng', version: '7.1.0'
+}
+
+application {
+    mainClassName = 'engine.Globals'
+}
+
+jar {
+  manifest {
+    attributes(
+      "Class-Path": configurations.compileClasspath.collect { it.getName() }.join(" "),
+      "Main-Class": "engine.Globals"
+    )
+  }
+}
+
+test {
+  useTestNG()
+  testLogging.showStandardStreams = true
+
+  testLogging {
+    exceptionFormat = "full"
+  }
+}
+
+task sourcesJar(type: Jar) {
+  from sourceSets.main.allJava
+  archiveClassifier = "sources"
+
+  group = "documentation"
+  description = "Assembles a jar archive containing the source code."
+}
+
+task javadocJar(type: Jar) {
+  from javadoc
+  archiveClassifier = "javadoc"
+
+  group = "documentation"
+  description = "Assembles a jar archive containing the Javadoc API documentation."
+}
+
+task fatJar(type: Jar) {
+  archiveBaseName = "SpecificatorDriver"
+  manifest {
+    attributes "Main-Class": "engine.Globals"
+  }
+  from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+  with jar
+  archiveClassifier = "fatjar"
+
+  group = "build"
+  description = "Assembles a jar archive containing everything needed to run the application."
+}
+
+javadoc {
+  options.addStringOption('Xdoclint:none', '-quiet')
+  if(JavaVersion.current().isJava9Compatible()) {
+    options.addBooleanOption("html5", true)
+  }
+  options.links "https://docs.oracle.com/javase/8/docs/api"
+  options.overview = "README.md"
+}
+
+spotless {
+  format "misc", {
+    target "**/*.gradle", "**/*.md", "**/.gitignore"
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+  java {
+    googleJavaFormat("1.7").aosp()
+    trimTrailingWhitespace()
+    endWithNewline()
+    importOrder "java", "javax", "org", "net", "com", "engine", "assets"
+  }
+}
+
+pmd {
+  // incrementalAnalysis = true
+  ruleSets = []
+  ruleSetFiles = files(".pmdrules.xml")
+}
+
+task format {
+  dependsOn spotlessApply
+  doLast { logger.lifecycle "Formatted!" }
+}
+
+task install(type: Copy) {
+  dependsOn installDist
+  from "${project.buildDir}/install"
+  into "${installLocation}"
+
+  doLast {
+    println "Add '${installLocation}/${project.name}/bin' to your PATH!"
+  }
+}
+
+task paths {
+  description "Write the current classpath and sourcepath to"
+  File classpath = file(".classpath")
+  File sourcepath = file(".sourcepath")
+  doLast {
+    classpath.write sourceSets.main.runtimeClasspath.plus(sourceSets.test.runtimeClasspath).asPath
+    sourcepath.write sourceSets.main.java.srcDirs.path.join(":") + ":" + sourceSets.test.java.srcDirs.path.join(":")
+  }
+}
+
+compileJava.finalizedBy(format)
