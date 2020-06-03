@@ -161,14 +161,4 @@ task install(type: Copy) {
   }
 }
 
-task paths {
-  description "Write the current classpath and sourcepath to"
-  File classpath = file(".classpath")
-  File sourcepath = file(".sourcepath")
-  doLast {
-    classpath.write sourceSets.main.runtimeClasspath.plus(sourceSets.test.runtimeClasspath).asPath
-    sourcepath.write sourceSets.main.java.srcDirs.path.join(":") + ":" + sourceSets.test.java.srcDirs.path.join(":")
-  }
-}
-
 compileJava.finalizedBy(format)

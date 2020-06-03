@@ -18,7 +18,6 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.opengl.Texture;
 
 import engine.Globals;
@@ -55,7 +54,7 @@ public class Renderer implements Runnable {
 
     public Renderer() {
         aaOn = false;
-        if (Globals.OS.equals("WINDOWS")) {
+        if ("WINDOWS".equals(Globals.OS)) {
             System.out.println("OS is Windows, defaulting aa to on!");
             aaOn = true;
         }
@@ -282,10 +281,6 @@ public class Renderer implements Runnable {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, toRender.getTex().getTextureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES, QUAD.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
         shader.stop();
-    }
-
-    private Vector2f vec2(float x, float y) {
-        return new Vector2f(x, y);
     }
 
     public Area createAreaFromImage(String fileName, byte cutoff) {

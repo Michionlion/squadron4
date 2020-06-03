@@ -1,3 +1,5 @@
+package engine.util;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -6,7 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -95,7 +100,7 @@ public class SharedLibraryLoader {
                 nativesDir =
                         loader.extractFile(
                                         SharedLibraryLoader.is64Bit
-                                                ? "liblwjgl.so"
+                                                ? "liblwjgl64.so"
                                                 : "liblwjgl32.so",
                                         null)
                                 .getParentFile();
@@ -111,7 +116,7 @@ public class SharedLibraryLoader {
         load = false;
     }
 
-    private static final HashSet<String> loadedLibraries = new HashSet<String>();
+    private static final Set<String> loadedLibraries = new HashSet<String>();
 
     private String nativesJar;
 
@@ -128,6 +133,7 @@ public class SharedLibraryLoader {
     }
 
     /** Returns a CRC of the remaining bytes in the stream. */
+    @SuppressWarnings("PMD.PreserveStackTrace")
     public String crc(InputStream input) {
         if (input == null) throw new IllegalArgumentException("input cannot be null.");
         CRC32 crc = new CRC32();
@@ -138,11 +144,14 @@ public class SharedLibraryLoader {
                 if (length == -1) break;
                 crc.update(buffer, 0, length);
             }
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
+                    RuntimeException re = new RuntimeException(e);
+                    re.addSuppressed(ex);
+                    throw re;
                 }
             }
         }
@@ -208,7 +217,8 @@ public class SharedLibraryLoader {
             if (file != null) {
                 try {
                     file.close();
-                } catch (IOException e) {
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         }
@@ -407,7 +417,7 @@ public class SharedLibraryLoader {
             System.load(extractFile(sourcePath, sourceCrc, extractedFile).getAbsolutePath());
             return null;
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Logger.getLogger(SharedLibraryLoader.class.getName()).log(Level.SEVERE, null, ex);
             return ex;
         }
     }

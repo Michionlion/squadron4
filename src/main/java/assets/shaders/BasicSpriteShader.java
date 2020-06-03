@@ -7,8 +7,8 @@ import engine.util.Util;
 
 public class BasicSpriteShader extends ShaderProgram implements SpriteShader {
 
-    private static final String VERTEX_FILE = "src/assets/shaders/sprite.vert";
-    private static final String FRAGMENT_FILE = "src/assets/shaders/sprite.frag";
+    private static final String VERTEX_FILE = "shaders/sprite.vert";
+    private static final String FRAGMENT_FILE = "shaders/sprite.frag";
 
     private int location_transformationMatrix;
 

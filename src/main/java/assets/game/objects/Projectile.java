@@ -53,9 +53,10 @@ public class Projectile extends GameObject {
                 return ProjectileType.LASER;
             case 2:
                 return ProjectileType.MISSILE;
+            default:
+                System.out.println("not 1 or 2, defaulting to laser");
+                return ProjectileType.LASER;
         }
-        System.out.println("not 1 or 2, defaulting to laser");
-        return ProjectileType.LASER;
     }
 
     // public static final int WIDTH = 20;

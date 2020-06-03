@@ -3,6 +3,7 @@ package engine;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.util.ArrayList;
+import java.util.List;
 
 import engine.interfaces.Collidable;
 import engine.interfaces.InputListener;
@@ -10,7 +11,7 @@ import engine.util.Util;
 
 public class Collider implements Collidable {
 
-    protected ArrayList<InputListener> hitListeners;
+    protected List<InputListener> hitListeners = new ArrayList<>();
     protected Area collision = new Area();
     private float rotation;
 
@@ -55,12 +56,12 @@ public class Collider implements Collidable {
     }
 
     @Override
-    public boolean isColliding(Collider c) {
-        return Util.isIntersecting(collision, c.collision);
+    public boolean isColliding(Collidable c) {
+        return Util.isIntersecting(collision, c.getCollision());
     }
 
-    public Area getIntersection(Collider c) {
-        return Util.getIntersection(collision, c.collision);
+    public Area getIntersection(Collidable c) {
+        return Util.getIntersection(collision, c.getCollision());
     }
 
     @Override

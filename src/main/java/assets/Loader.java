@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +28,7 @@ public class Loader {
 
     private static List<Integer> vaos = new ArrayList<>();
     private static List<Integer> vbos = new ArrayList<>();
-    private static HashMap<String, Texture> textures = new HashMap<>();
+    private static Map<String, Texture> textures = new HashMap<>();
     private static int renderTexture = -1;
 
     public static RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices) {
@@ -85,7 +86,7 @@ public class Loader {
         try {
             System.out.println("Starting load " + fileName);
 
-            InputStream in = ResourceLoader.getResourceAsStream("res/art/" + fileName + ".png");
+            InputStream in = ResourceLoader.getResourceAsStream("art/" + fileName + ".png");
             tex = TextureLoader.getTexture("PNG", in);
 
             System.out.println("Loaded " + fileName);

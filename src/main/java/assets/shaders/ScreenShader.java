@@ -7,8 +7,8 @@ import engine.util.Util;
 
 public class ScreenShader extends ShaderProgram implements SpriteShader {
 
-    private static final String VERTEX_FILE = "src/assets/shaders/screen_shader.vert";
-    private static final String FRAGMENT_FILE = "src/assets/shaders/screen_shader.frag";
+    private static final String VERTEX_FILE = "shaders/screen_shader.vert";
+    private static final String FRAGMENT_FILE = "shaders/screen_shader.frag";
 
     private int location_transformationMatrix;
     private int location_antiAliasingOn;

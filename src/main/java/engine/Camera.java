@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector2f;
 import engine.interfaces.Tickable;
 
 public class Camera extends Rectangle2D.Float implements Tickable {
+    private static final long serialVersionUID = 9018440006191694719L;
 
     private Vector2f target;
     private float moveFactor = 0.95f; // between 0.95 and 0.99

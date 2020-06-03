@@ -1,15 +1,18 @@
 package assets.shaders;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.util.ResourceLoader;
 
 public abstract class ShaderProgram {
 
@@ -86,15 +89,16 @@ public abstract class ShaderProgram {
 
     private static int loadShader(String file, int type) {
         StringBuilder shaderSource = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+        try (BufferedReader reader =
+                new BufferedReader(
+                        new InputStreamReader(ResourceLoader.getResourceAsStream(file)))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 shaderSource.append(line).append("\n");
             }
-        } catch (IOException e) {
+        } catch (IOException ex) {
             System.err.println("Could not read file!");
-            e.printStackTrace();
+            Logger.getLogger(ShaderProgram.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(-1);
         }
         int shaderID = GL20.glCreateShader(type);

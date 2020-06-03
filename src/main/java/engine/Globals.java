@@ -11,6 +11,7 @@ import org.lwjgl.util.vector.Vector2f;
 import engine.interfaces.RenderObject;
 import engine.interfaces.Tickable;
 import engine.render.Renderer;
+import engine.util.SharedLibraryLoader;
 
 import assets.sprites.WorldObject;
 

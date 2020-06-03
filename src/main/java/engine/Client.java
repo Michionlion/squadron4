@@ -30,6 +30,7 @@ public class Client implements Runnable {
             in = new Scanner(socket.getInputStream());
             out = new PrintWriter(socket.getOutputStream());
         } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
@@ -101,7 +102,7 @@ public class Client implements Runnable {
             input = input.substring(6);
         }
         String[] info = input.split(sepChar, 0);
-        String name = "";
+        String name = null;
         Vector2f pos = null, delta = new Vector2f(0, 0);
         float angle = 0;
         int type = ProjectileType.LASER.getID();
@@ -271,7 +272,7 @@ public class Client implements Runnable {
      *
      * @param msg the object to send
      */
-    private void sendMSG(Object msg) {
+    protected void sendMSG(Object msg) {
         send(msg.toString());
     }
 
@@ -281,7 +282,7 @@ public class Client implements Runnable {
         Thread.currentThread().interrupt();
     }
 
-    private void sleep(int i) {
+    protected void sleep(int i) {
         try {
             Thread.sleep(i);
         } catch (InterruptedException ex) {
