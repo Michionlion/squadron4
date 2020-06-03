@@ -1,3 +1,27 @@
-/dist/
-/nbproject/private/
+# Gradle
 /build/
+.gradle/
+
+# Maven
+/target/
+
+# Testing
+test-output/
+
+# Metadata
+/bin/
+/.settings/
+.classpath
+.sourcepath
+.project
+.metadata
+.sln
+
+# Generated files
+*.class
+*.pyc
+*.gch
+*.o
+*.d
+*.a
+*.out
